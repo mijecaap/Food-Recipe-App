@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "457111173033",
+    "project_id": "recipez-d861e",
+    "storage_bucket": "recipez-d861e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:457111173033:android:c1411d072a8d1a130eb6b8",
+        "android_client_info": {
+          "package_name": "com.example.recipez"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "457111173033-88qk0l52ug0rn8s76p4lrl79jalkkjo6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVtuoJkKd30ejIUwUrvLTaKD84O6NMzo8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "457111173033-88qk0l52ug0rn8s76p4lrl79jalkkjo6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
