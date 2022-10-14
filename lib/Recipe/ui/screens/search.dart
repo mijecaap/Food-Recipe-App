@@ -23,7 +23,74 @@ class Search extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    var statusHeight = MediaQuery
+        .of(context)
+        .viewPadding
+        .top;
+    var size = MediaQuery
+        .of(context)
+        .size;
+    var screenHeight = size.height - (statusHeight);
+
+    return MaterialApp(
+      home: DefaultTabController(length: 3,
+          child: Scaffold(
+            appBar: AppBar(
+              leading: Builder(
+                builder: (BuildContext context) {
+                  return IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () { Navigator.pop(context); },
+                  );
+                },
+              ),
+              backgroundColor: Colors.white,
+              centerTitle:true,
+              foregroundColor: Colors.deepPurple,
+              bottom: TabBar(
+                indicatorColor:Colors.deepPurple,
+                labelColor : Colors.deepPurple,
+                unselectedLabelColor : Colors.grey,
+                tabs: [
+                  Tab(text: "Platillos"),
+                  Tab(text: "Ingredientes"),
+                  Tab(text: "Usuario")
+                ],
+              ),
+              title: Text("¿que deseas cocinar?"),
+            ),
+            body: TabBarView(
+              children: [
+                InputText(hintText: "Busqueda",
+                    maxLines: 1,
+                    maxLength: 20,
+                    textInputType: TextInputType.text,
+                    textEditingController: _controllerTitleRecipe),
+                Tab(text: "Ingredientes"),
+                InputText(hintText: "Busqueda",
+                    maxLines: 1,
+                    maxLength: 20,
+                    textInputType: TextInputType.text,
+                    textEditingController: _controllerTitleRecipe)
+              ],
+            ),
+          )
+      ),
+    );
+  }
+
+/*
+class Search extends StatelessWidget {
+
+  String userId;
+  final _controllerTitleRecipe = TextEditingController();
+  late RecipeBloc recipeBloc;
+
+  Search(this.userId, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+
 
     var statusHeight = MediaQuery.of(context).viewPadding.top;
     var size = MediaQuery.of(context).size;
@@ -62,13 +129,13 @@ class Search extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: screenHeight / 48),
-                        FittedText(heightBox: screenHeight / 16, firstText: "Search ", boldText: "Recipes",)
+                        FittedText(heightBox: screenHeight / 24, firstText: "", boldText: "¿Que deseas cocinar?")
                       ],
                     ),
                     InputText(
-                        hintText: "Search",
+                        hintText: "Busqueda",
                         maxLines: 1,
-                        maxLength: 15,
+                        maxLength: 20,
                         textInputType: TextInputType.text,
                         textEditingController: _controllerTitleRecipe
                     ),
@@ -101,7 +168,7 @@ class Search extends StatelessWidget {
   }
 }
 
-/*
+
 ListView(
           physics: BouncingScrollPhysics(),
           children: [
@@ -111,5 +178,5 @@ ListView(
                 content: ListRecipes(cardsRecipes: cards, type: 0)
             )
           ],
-        ),
-*/
+        ),*/
+}
