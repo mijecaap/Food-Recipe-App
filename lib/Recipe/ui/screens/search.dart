@@ -8,7 +8,7 @@ import 'package:recipez/Recipe/ui/widgets/grid_view_recipes.dart';
 import 'package:recipez/Recipe/ui/widgets/list_recipes.dart';
 import 'package:recipez/Recipe/ui/widgets/search_input.dart';
 import 'package:recipez/Shared/model/app_color.dart';
-import 'package:recipez/Shared/ui/widgets/fitted_text.dart';
+import 'package:recipez/Shared/ui/widgets/tittle_page.dart';
 import 'package:recipez/Shared/ui/widgets/title_header.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:recipez/Recipe/ui/widgets/input_text.dart';
@@ -62,7 +62,7 @@ class Search extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: screenHeight / 48),
-                        FittedText(heightBox: screenHeight / 16, firstText: "Search ", boldText: "Recipes",)
+                        TittlePage(text: "Search Recipes")
                       ],
                     ),
                     InputText(
