@@ -8,7 +8,7 @@ import 'package:recipez/Recipe/ui/widgets/grid_view_recipes.dart';
 import 'package:recipez/Recipe/ui/widgets/list_recipes.dart';
 import 'package:recipez/Recipe/ui/widgets/search_input.dart';
 import 'package:recipez/Shared/model/app_color.dart';
-import 'package:recipez/Shared/ui/widgets/fitted_text.dart';
+//import 'package:recipez/Shared/ui/widgets/fitted_text.dart';
 import 'package:recipez/Shared/ui/widgets/title_header.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:recipez/Recipe/ui/widgets/input_text.dart';
@@ -44,13 +44,13 @@ class Search extends StatelessWidget {
                   );
                 },
               ),
-              backgroundColor: Colors.white,
+              backgroundColor: AppColor.blanco,
               centerTitle:true,
-              foregroundColor: Colors.deepPurple,
+              foregroundColor: AppColor.morado_3_53c,
               bottom: TabBar(
-                indicatorColor:Colors.deepPurple,
-                labelColor : Colors.deepPurple,
-                unselectedLabelColor : Colors.grey,
+                indicatorColor:AppColor.lila_1_8ff,
+                labelColor : AppColor.morado_3_53c,
+                unselectedLabelColor : AppColor.lila_2_6be,
                 tabs: [
                   Tab(text: "Platillos"),
                   Tab(text: "Ingredientes"),
