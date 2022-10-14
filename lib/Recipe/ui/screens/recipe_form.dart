@@ -6,7 +6,7 @@ import 'package:recipez/Recipe/bloc/bloc_recipe.dart';
 import 'package:recipez/Recipe/model/recipe.dart';
 import 'package:recipez/Recipe/ui/widgets/input_text.dart';
 import 'package:recipez/Shared/model/app_color.dart';
-import 'package:recipez/Shared/ui/widgets/fitted_text.dart';
+import 'package:recipez/Shared/ui/widgets/tittle_page.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'dart:developer';
@@ -152,7 +152,7 @@ class _RecipeFormState extends State<RecipeForm> {
                               ),
                             ),
                             SizedBox(width: screenHeight / 48),
-                            FittedText(heightBox: screenHeight / 16, firstText: "New ", boldText: "Recipes",)
+                            TittlePage(text: "New Recipes")
                           ],
                         ),
                       ),

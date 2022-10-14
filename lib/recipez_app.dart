@@ -44,17 +44,10 @@ class _RecipezApp extends State<RecipezApp> {
       bloc: UserBloc(),
       child: Scaffold(
         extendBody: true,
+        backgroundColor: AppColor.blanco,
         body: Container(
           width: size.width,
           height: size.height,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/background-app.png"),
-              colorFilter: ColorFilter.mode(Color(0xff990000).withOpacity(0.8), BlendMode.modulate),
-              fit: BoxFit.cover
-            )
-            /*color: AppColor.backgroundColor*/
-          ),
           child: Stack(
             children: [
               PageView(
@@ -62,7 +55,6 @@ class _RecipezApp extends State<RecipezApp> {
                 onPageChanged: (index) {
                   setState(() => indexTap = index);
                 },
-
                 children: [
                   MainHome(),
                   AddRecipe(),

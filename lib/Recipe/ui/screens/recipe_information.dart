@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:recipez/Recipe/model/recipe.dart';
 import 'package:recipez/Recipe/model/recipe_info.dart';
 import 'package:recipez/Shared/model/app_color.dart';
-import 'package:recipez/Shared/ui/widgets/fitted_text.dart';
+import 'package:recipez/Shared/ui/widgets/tittle_page.dart';
 import 'package:recipez/User/ui/widgets/profile_container.dart';
 
 import '../../bloc/bloc_recipe.dart';
