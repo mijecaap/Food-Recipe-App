@@ -49,6 +49,7 @@ dependencies:
   path: ^1.8.1
   file_picker: ^5.0.1
   purchases_flutter: ^4.2.0
+  flutter_facebook_auth: ^3.5.0
 
 dev_dependencies:
   flutter_test:
