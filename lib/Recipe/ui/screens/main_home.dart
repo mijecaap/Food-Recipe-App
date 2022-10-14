@@ -8,7 +8,7 @@ import 'package:recipez/Recipe/model/recipe_global.dart';
 import 'package:recipez/Recipe/ui/widgets/card_recipe.dart';
 import 'package:recipez/Recipe/ui/widgets/grid_view_recipes.dart';
 import 'package:recipez/Shared/ui/widgets/button_search.dart';
-import 'package:recipez/Shared/ui/widgets/fitted_text.dart';
+import 'package:recipez/Shared/ui/widgets/tittle_page.dart';
 import 'package:recipez/Shared/ui/widgets/subtitle_button.dart';
 
 import '../../../User/bloc/bloc_user.dart';
@@ -31,25 +31,17 @@ class MainHome extends StatelessWidget {
     return SafeArea(
         child: Container(
           padding: EdgeInsets.only(
-            top: screenHeight / 48,
-            right: screenHeight / 48,
-            left: screenHeight / 48
+            top: 40,
+            right: 20,
+            left: 20
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              FittedText(
-                heightBox: size.height / 16,
-                firstText: "All ",
-                boldText: "Recipes ",
-                secondText: "for you",
-              ),
-              SizedBox(height: screenHeight / 48),
-              ButtonSearch(
-                heightBox: size.height / 16,
-                userBloc: userBloc,
-              ),
-              SizedBox(height: screenHeight / 48),
+              TittlePage(text: "All recipes for you"),
+              SizedBox(height: 30),
+              ButtonSearch(userBloc: userBloc),
+              SizedBox(height: 30),
               BlocProvider(
                 bloc: RecipeBloc(),
                 child: FutureBuilder(
@@ -106,7 +98,7 @@ class ContainerRecipes extends StatelessWidget {
                 shrinkWrap: true,
                 physics: BouncingScrollPhysics(),
                 children: [
-                  const SubtitleButton(colorText: "Popular ", secondText: "recipes"),
+                  const SubtitleButton(text: "Most Popular"),
                   GridViewRecipes(cardsRecipes: wdgt),
                   /*const SubtitleButton(colorText: "New ", secondText: "recipes"),
                     GridViewRecipes(cardsRecipes: cards),*/

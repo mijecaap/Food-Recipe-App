@@ -31,7 +31,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 child: Container(
                   height: 60,
                   width: MediaQuery.of(context).size.width,
-                  color: AppColor.secondaryColor.withOpacity(0.8),
+                  color: AppColor.gris_3_de3,
                 ),
               ),
             ),
@@ -60,14 +60,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
                       widget.onTapTapped(0);
                     },
                     child: Material(
-                      elevation: 10,
                       borderRadius: BorderRadius.circular(20),
                       child: CircleAvatar(
                         radius: 20.0,
-                        backgroundColor: widget.indexTap == 0 ? Colors.white : AppColor.secondaryColor,
+                        backgroundColor: widget.indexTap == 0 ? AppColor.lila_1_8ff : AppColor.gris_2_df2,
                         child: Icon(
                           Icons.home,
-                          color: widget.indexTap == 0 ? AppColor.secondaryColor : Colors.white,
+                          color: widget.indexTap == 0 ? AppColor.morado_2_347 : AppColor.gris_5_d79,
                         ),
                       ),
                     )
@@ -78,14 +77,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
                         widget.onTapTapped(2);
                       },
                       child: Material(
-                        elevation: 10,
                         borderRadius: BorderRadius.circular(20),
                         child: CircleAvatar(
                           radius: 20.0,
-                          backgroundColor: widget.indexTap == 2 ? Colors.white : AppColor.secondaryColor,
+                          backgroundColor: widget.indexTap == 2 ? AppColor.lila_1_8ff : AppColor.gris_2_df2,
                           child: Icon(
                             Icons.person,
-                            color: widget.indexTap == 2 ? AppColor.secondaryColor : Colors.white,
+                            color: widget.indexTap == 2 ? AppColor.morado_2_347 : AppColor.gris_5_d79,
                           ),
                         ),
                       )

@@ -26,7 +26,7 @@ class CustomNavItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(30),
         child: CircleAvatar(
           radius: 30,
-          backgroundColor: AppColor.secondaryColor,
+          backgroundColor: AppColor.morado_2_347,
           child: CircleAvatar(
             radius: 25,
             backgroundColor: indexTap == id
@@ -35,7 +35,7 @@ class CustomNavItem extends StatelessWidget {
             child: Icon(
               icon,
               color: indexTap == id
-                  ? AppColor.secondaryColor
+                  ? AppColor.morado_2_347
                   : Colors.white,
               size: 32.0,
             ),

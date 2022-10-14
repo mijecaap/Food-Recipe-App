@@ -6,9 +6,8 @@ import 'package:recipez/Shared/model/app_color.dart';
 class OptionsActionSheet extends StatefulWidget {
   VoidCallback onPressed;
   VoidCallback onPressed2;
-  final double heightIcon;
 
-  OptionsActionSheet({required this.onPressed, required this.onPressed2, required this.heightIcon, Key? key}) : super(key: key);
+  OptionsActionSheet({required this.onPressed, required this.onPressed2, Key? key}) : super(key: key);
 
   @override
   State<OptionsActionSheet> createState() => _OptionsActionSheetState();
@@ -56,25 +55,12 @@ class _OptionsActionSheetState extends State<OptionsActionSheet> {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(widget.heightIcon / 2),
+    return GestureDetector(
+      onTap: () => _showActionsSheet(context),
+      child: const Icon(
+        Icons.more_horiz,
+        size: 24,
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () => _showActionsSheet(context),
-          borderRadius: BorderRadius.circular(widget.heightIcon / 2),
-          child: Container(
-            height: widget.heightIcon,
-            width: widget.heightIcon,
-            child: Icon(
-              Icons.more_vert,
-              size: widget.heightIcon / 1.5,
-            )
-          ),
-        ),
-      )
     );
   }
 }

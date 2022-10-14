@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recipez/Recipe/ui/widgets/input_text.dart';
 import 'package:recipez/Shared/model/app_color.dart';
-import 'package:recipez/Shared/ui/widgets/fitted_text.dart';
+import 'package:recipez/Shared/ui/widgets/tittle_page.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
@@ -175,7 +175,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                             ),
                           ),
                           SizedBox(width: screenHeight / 48),
-                          FittedText(heightBox: screenHeight / 16, firstText: "New ", boldText: "Recipes",)
+                          TittlePage(text: "New Recipes")
                         ],
                       ),
                     ),
