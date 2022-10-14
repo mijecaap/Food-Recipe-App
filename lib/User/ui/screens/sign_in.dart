@@ -101,8 +101,26 @@ class _SignInState extends State<SignIn> {
 
                   ButtonBlue(
                     text: "Facebook",
-                    onPressed: (){
-
+                    onPressed: () {
+                      userBloc.signOut();
+                      userBloc.singInFacebook()
+                          .then((User? user) {
+                        userBloc.getUserId()
+                            .then((value) => userBloc.readUser(value)
+                            .then((value) {
+                          if(value.uid.isEmpty) {
+                            userBloc.updateUserData(UserModel(
+                                uid: user!.uid,
+                                name: user.displayName!,
+                                email: user.email!,
+                                photoURL: user.photoURL!,
+                                subscription: false,
+                                myRecipes: [],
+                                favoriteRecipes: []
+                            ));
+                          }
+                        }));
+                      });
                     },
                     width: 300.0,
                     height: 50.0,

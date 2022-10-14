@@ -1,3 +1,4 @@
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:recipez/User/repository/auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +14,7 @@ class UserBloc implements Bloc {
   // Stream - Firebase
   // StreamController
   Stream<User?> streamFirebase = FirebaseAuth.instance.authStateChanges();
+  Future<AccessToken?> futureAccessToken = FacebookAuth.instance.accessToken;
   Stream<User?> get authStatus => streamFirebase;
 
   // Casos de usa
@@ -28,6 +30,7 @@ class UserBloc implements Bloc {
   // 2. Sign Out de la aplicación
   signOut() {
     _auth_repository.signOut();
+    FacebookAuth.instance.logOut();
   }
 
   // 3. Register user in DB

@@ -34,8 +34,6 @@ class FirebaseAuthAPI {
     UserCredential authResult = await _auth.signInWithCredential(facebookAuthCredential);
     User? user = authResult.user;
 
-    log(authResult.toString());
-
     return user;
   }
 
