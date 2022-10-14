@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:card_loading/card_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
@@ -7,7 +6,6 @@ import 'package:recipez/Recipe/ui/widgets/options_action_sheet.dart';
 import 'package:recipez/Shared/model/app_color.dart';
 import 'package:recipez/User/bloc/bloc_user.dart';
 import 'package:recipez/User/model/user.dart';
-import 'package:recipez/User/ui/widgets/icon_options.dart';
 
 class ProfileContainer extends StatelessWidget {
   late UserBloc userBloc;
@@ -34,22 +32,43 @@ class ProfileContainer extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(15)),
             );
           case ConnectionState.active:
-            return showProfileData(snapshot);
+            return FutureBuilder(
+              future: userBloc.futureAccessToken,
+              builder: (BuildContext context, AsyncSnapshot snapshotToken) {
+                if (snapshotToken.hasData) {
+                  return showProfileData(snapshot, snapshotToken);
+                }
+                return showProfileData(snapshot, snapshotToken);
+              },
+            );
           case ConnectionState.done:
-            return showProfileData(snapshot);
+            return FutureBuilder(
+              future: userBloc.futureAccessToken,
+              builder: (BuildContext context, AsyncSnapshot snapshotToken) {
+                if (snapshotToken.hasData) {
+                  return showProfileData(snapshot, snapshotToken);
+                }
+                return Container();
+              },
+            );
         }
       },
     );
   }
 
-  Widget showProfileData(AsyncSnapshot snapshot) {
+  Widget showProfileData(AsyncSnapshot snapshot, AsyncSnapshot snapshotToken) {
     if (!snapshot.hasData || snapshot.hasError) {
       return const CardLoading(
         height: 54,
         borderRadius: BorderRadius.all(Radius.circular(15)),
       );
     } else {
-      user = UserModel(uid: snapshot.data.uid, name: snapshot.data.displayName, email: snapshot.data.email, photoURL: snapshot.data.photoURL);
+      user = UserModel(
+        uid: snapshot.data.uid,
+        name: snapshot.data.displayName,
+        email: snapshot.data.email,
+        photoURL: snapshotToken.data != null ? snapshot.data.photoURL + '?height=500&access_token=' + snapshotToken.data.token : snapshot.data.photoURL
+      );
 
       return Container(
         height: 54,
