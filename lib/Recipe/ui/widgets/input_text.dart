@@ -37,6 +37,7 @@ class _InputTextState extends State<InputText> {
         color: AppColor.lila_2_6be,
         fontWeight: FontWeight.normal,
       ),
+
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.all(10.0),
         prefixIcon: const Icon(Icons.search,color: Colors.deepPurple, size: 20.0),
