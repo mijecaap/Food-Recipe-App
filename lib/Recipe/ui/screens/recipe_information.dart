@@ -75,7 +75,7 @@ class RecipeInformation extends StatelessWidget {
                                         bottomRight: Radius.circular(screenHeight / 96)
                                     )
                                 ),
-                                child: Image(image: NetworkImage(recipe.photoURL), fit: BoxFit.fill)
+                                child: Image(image: NetworkImage(recipe.photoURL), fit: BoxFit.cover)
                             ),
                             SafeArea(
                               child: Row(
