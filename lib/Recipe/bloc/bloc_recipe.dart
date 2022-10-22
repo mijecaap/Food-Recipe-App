@@ -22,6 +22,9 @@ class RecipeBloc implements Bloc {
 
   // 3. Leer todas las recetas
   Stream<List<RecipeCardModel>> readAllRecipes(String userId) => _cloudFirestoreRepository.readAllRecipeData(userId);
+  Stream<List<RecipeCardModel>> readOrderLikesData(String userId) => _cloudFirestoreRepository.readOrderLikesData(userId);
+  Stream<List<RecipeCardModel>> readOrderDateData(String userId) => _cloudFirestoreRepository.readOrderDateData(userId);
+  Stream<List<RecipeCardModel>> readOrderViewsData(String userId) => _cloudFirestoreRepository.readOrderViewsData(userId);
 
   Stream<List<RecipeCardModel>> readFavoritesRecipes(List<String> favorites) => _cloudFirestoreRepository.readFavoritesRecipeData(favorites);
   Stream<List<RecipeCardModel>> readMyRecipes(List<String> myRecipes) => _cloudFirestoreRepository.readMyRecipesData(myRecipes);

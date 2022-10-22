@@ -22,10 +22,28 @@ class CloudFirestoreAPI {
   Stream<List<RecipeCardModel>> readOrderLikesData(String userId) {
     return _db
       .collection(RECIPES)
-      .where('userId', isNotEqualTo: userId )
+      .where('likes', isGreaterThan: 0 )
       .orderBy('likes', descending: true)
       .snapshots()
-      .map((snapshot) => snapshot.docs.map((doc) => RecipeCardModel.fromJson(doc.data(), doc.id)).toList());
+      .map((snapshot) => snapshot.docs.where((doc) => doc['userId'] != userId).map((doc) => RecipeCardModel.fromJson(doc.data(), doc.id)).toList());
+  }
+
+  Stream<List<RecipeCardModel>> readOrderDateData(String userId) {
+    return _db
+        .collection(RECIPES)
+        .where('dateCreation', isGreaterThan: DateTime(DateTime.now().year, DateTime.now().month))
+        .orderBy('dateCreation', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.where((doc) => doc['userId'] != userId).map((doc) => RecipeCardModel.fromJson(doc.data(), doc.id)).toList());
+  }
+
+  Stream<List<RecipeCardModel>> readOrderViewsData(String userId) {
+    return _db
+        .collection(RECIPES)
+        .where('views', isGreaterThan: 0 )
+        .orderBy('views', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.where((doc) => doc['userId'] != userId).map((doc) => RecipeCardModel.fromJson(doc.data(), doc.id)).toList());
   }
   
   Stream<List<RecipeCardModel>> readFavoritesData(List<String> favoritesId) {

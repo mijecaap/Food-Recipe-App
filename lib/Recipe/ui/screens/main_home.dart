@@ -84,7 +84,7 @@ class ContainerRecipes extends StatelessWidget {
 
     return Flexible(
         child: StreamBuilder<List<RecipeCardModel>>(
-          stream: recipeBloc.readAllRecipes(userId),
+          stream: recipeBloc.readOrderViewsData(userId),
           builder: (context, snapshot){
             if (snapshot.hasError){
               return Text('Ocurrió un error');
