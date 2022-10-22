@@ -25,6 +25,7 @@ class SearchInput extends StatelessWidget {
         decoration: InputDecoration(
             border: InputBorder.none,
             hintText: placeHolder,
+
             hintStyle: GoogleFonts.openSans(
               fontSize: 16.0,
             ),

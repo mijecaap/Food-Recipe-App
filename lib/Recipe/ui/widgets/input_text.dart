@@ -34,23 +34,26 @@ class _InputTextState extends State<InputText> {
       maxLines: widget.maxLines,
       maxLength: widget.maxLength,
       style: GoogleFonts.openSans(
-        color: AppColor.primaryColor,
-        fontWeight: FontWeight.bold,
+        color: AppColor.lila_2_6be,
+        fontWeight: FontWeight.normal,
       ),
+
       decoration: InputDecoration(
+        contentPadding: const EdgeInsets.all(10.0),
+        prefixIcon: const Icon(Icons.search,color: Colors.deepPurple, size: 20.0),
           filled: true,
           counterText: '',
-          fillColor: AppColor.fourthyColor,
+          fillColor: AppColor.gris_1_8fa,
           hintText: widget.hintText,
           border: InputBorder.none,
           isDense: true,
           suffixText: widget.textEditingController.text.length.toString() + " / " + widget.maxLength.toString(),
           enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColor.fourthyColor),
+              borderSide: BorderSide(color: AppColor.lila_2_6be),
               borderRadius: BorderRadius.all(Radius.circular(9.0))
           ),
           focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColor.primaryColor),
+              borderSide: BorderSide(color: AppColor.lila_2_6be),
               borderRadius: BorderRadius.all(Radius.circular(9.0))
           ),
       ),
