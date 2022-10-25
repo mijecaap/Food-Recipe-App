@@ -3,17 +3,17 @@ import 'package:flutter/services.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recipez/Recipe/bloc/bloc_recipe.dart';
-import 'package:recipez/Recipe/model/recipe.dart';
+import 'package:recipez/Recipe/model/ingredient.dart';
+import 'package:recipez/Recipe/ui/widgets/alert_dialog_ingredient.dart';
 import 'package:recipez/Recipe/ui/widgets/input_text.dart';
 import 'package:recipez/Shared/model/app_color.dart';
 import 'package:recipez/Shared/ui/widgets/tittle_page.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'dart:developer';
 
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import '../../model/recipe.dart';
+
+const List<String> list = <String>['Rápida', 'Criolla', 'China', 'Vegetariana'];
 
 class RecipeForm extends StatefulWidget {
 
@@ -27,8 +27,9 @@ class RecipeForm extends StatefulWidget {
 
 class _RecipeFormState extends State<RecipeForm> {
 
-  List<TextEditingController> listControllerIngredient = [TextEditingController()];
-  late List<IngredientWidget> listDynamicIngredient = [IngredientWidget(listControllerIngredient[0])];
+  late String dropdownValue = list.first;
+  List<IngredientModel> listIngredient = [IngredientModel("", "", 0, "")];
+  late List<IngredientPopupWidget> listDynamicIngredient = [IngredientPopupWidget(ingredient: listIngredient[0])];
   List<TextEditingController> listControllerStep = [TextEditingController()];
   late List<StepWidget> listDynamicStep = [StepWidget(listControllerStep[0])];
   final _controllerTitleRecipe = TextEditingController();
@@ -41,14 +42,14 @@ class _RecipeFormState extends State<RecipeForm> {
 
   addIngredient() {
     if(listDynamicIngredient.length > 9) return;
-    listControllerIngredient.add(TextEditingController());
-    listDynamicIngredient.add(new IngredientWidget(listControllerIngredient[listControllerIngredient.length - 1]));
+    listIngredient.add(IngredientModel("", "", 0, ""));
+    listDynamicIngredient.add(IngredientPopupWidget(ingredient: listIngredient[listIngredient.length - 1]));
     setState(() {});
   }
 
   deleteIngredient(index) {
     if(listDynamicIngredient.length == 1) return;
-    listControllerIngredient.removeAt(index);
+    listIngredient.removeAt(index);
     listDynamicIngredient.removeAt(index);
     setState(() {});
   }
@@ -56,7 +57,7 @@ class _RecipeFormState extends State<RecipeForm> {
   addStep() {
     if(listDynamicStep.length > 9) return;
     listControllerStep.add(TextEditingController());
-    listDynamicStep.add(new StepWidget(listControllerStep[listControllerStep.length - 1]));
+    listDynamicStep.add(StepWidget(listControllerStep[listControllerStep.length - 1]));
     setState(() {});
   }
 
@@ -73,20 +74,30 @@ class _RecipeFormState extends State<RecipeForm> {
       if(image == null) return;
       final imageTemp = File(image.path);
       setState(() => this.image = imageTemp);
-    } on PlatformException catch(e) {
-      print('Failed to pick image: $e');
+    } on PlatformException {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Failed to pick image"),
+          )
+      );
+      return;
     }
   }
 
   Future pickCamera() async {
     try {
-      FocusScope.of(context).requestFocus(new FocusNode());
+      FocusScope.of(context).requestFocus(FocusNode());
       final image = await ImagePicker().pickImage(source: ImageSource.camera);
       if(image == null) return;
       final imageTemp = File(image.path);
       setState(() => this.image = imageTemp);
-    } on PlatformException catch(e) {
-      print('Failed to pick image: $e');
+    } on PlatformException {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Failed to pick image"),
+          )
+      );
+      return;
     }
   }
 
@@ -204,7 +215,7 @@ class _RecipeFormState extends State<RecipeForm> {
                             Expanded(
                               child: Text(
                                 "Estimated time (min)",
-                                style: GoogleFonts.openSans(
+                                style: GoogleFonts.roboto(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w400,
                                     color: AppColor.morado_3_53c
@@ -213,6 +224,52 @@ class _RecipeFormState extends State<RecipeForm> {
                             ),
                             Expanded(
                               child: InputText(hintText: "Ex. 120", maxLines: 1, maxLength: 3, textInputType: TextInputType.number, textEditingController: _controllerTimeRecipe),
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Type of food",
+                                style: GoogleFonts.roboto(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    color: AppColor.morado_3_53c
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: DropdownButtonFormField<String>(
+                                value: dropdownValue,
+                                isExpanded: true,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: AppColor.gris_1_8fa,
+                                  border: InputBorder.none,
+                                  isDense: true,
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.lila_2_6be),
+                                      borderRadius: const BorderRadius.all(Radius.circular(5.0))
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.morado_2_347),
+                                      borderRadius: const BorderRadius.all(Radius.circular(5.0))
+                                  ),
+                                ),
+                                items: list.map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    dropdownValue = value!;
+                                  });
+                                },
+                              ),
                             )
                           ],
                         ),
@@ -242,7 +299,7 @@ class _RecipeFormState extends State<RecipeForm> {
                                     },
                                     child: Icon(
                                       Icons.delete,
-                                      color: AppColor.morado_3_53c,
+                                      color: AppColor.rojo_f59,
                                       size: 24,
                                     ),
                                   ),
@@ -290,7 +347,7 @@ class _RecipeFormState extends State<RecipeForm> {
                                     },
                                     child: Icon(
                                       Icons.delete,
-                                      color: AppColor.morado_3_53c,
+                                      color: AppColor.rojo_f59,
                                       size: 24,
                                     ),
                                   ),
@@ -299,7 +356,7 @@ class _RecipeFormState extends State<RecipeForm> {
                             ),
                           ),
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                         ),
                         listDynamicStep.length > 9 ? Container() : TextButton(
                           onPressed: addStep,
@@ -310,7 +367,7 @@ class _RecipeFormState extends State<RecipeForm> {
                             ),
                           ),
                         ),
-                        OutlinedButton(
+                        ElevatedButton(
                           onPressed: () {
                             if (image == null){
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -322,9 +379,9 @@ class _RecipeFormState extends State<RecipeForm> {
                             }
                             if(
                             _controllerTitleRecipe.text == ''
-                                || _controllerDescriptionRecipe == ''
-                                || _controllerPersonRecipe == ''
-                                || _controllerTimeRecipe == ''
+                                || _controllerDescriptionRecipe.text == ''
+                                || _controllerPersonRecipe.text == ''
+                                || _controllerTimeRecipe.text == ''
                             ) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
@@ -333,7 +390,7 @@ class _RecipeFormState extends State<RecipeForm> {
                               );
                               return;
                             }
-                            final isEmptyIg = listControllerIngredient.any((element) => element.text == '');
+                            final isEmptyIg = listIngredient.any((element) => element.valueText == '');
                             final isEmptySt = listControllerStep.any((element) => element.text == '');
                             if(isEmptySt || isEmptyIg){
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -345,9 +402,15 @@ class _RecipeFormState extends State<RecipeForm> {
                             }
                             showDialog(
                                 context: context,
-                                builder: (BuildContext context) => const AlertDialog(
-                                  title: Text("Cargando"),
-                                  content: CircularProgressIndicator(),
+                                barrierDismissible: false,
+                                builder: (BuildContext context) => Center(
+                                  child: SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: CircularProgressIndicator(
+                                      color: AppColor.morado_3_53c,
+                                    ),
+                                  ),
                                 )
                             );
                             recipeBloc.uploadImage(image!)
@@ -359,31 +422,44 @@ class _RecipeFormState extends State<RecipeForm> {
                                   description: _controllerDescriptionRecipe.text,
                                   personQuantity: _controllerPersonRecipe.text,
                                   estimatedTime: _controllerTimeRecipe.text,
-                                  ingredients: listControllerIngredient.map((e) => e.text).toList(),
+                                  ingredients: listIngredient.map((e) {
+                                    return {
+                                      'name': e.name,
+                                      'valueText': e.valueText,
+                                      'value': e.value,
+                                      'dimension': e.dimension
+                                    };
+                                  }).toList(),
                                   steps: listControllerStep.map((e) => e.text).toList(),
                                   likesUserId: [],
                                   likes: 0,
                                   dateCreation: DateTime.now()
                               ), widget.userId).then((value) {
                                 Navigator.of(context).popUntil((route) => route.isFirst);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Successfully created"),
+                                    )
+                                );
                               });
                             });
 
                           },
-                          style: OutlinedButton.styleFrom(
-                              side: BorderSide(
-                                  width: 2.0,
-                                  color: AppColor.secondaryColor
-                              )
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColor.morado_3_53c
                           ),
-                          child: Text(
-                            "PUBLICAR",
-                            style: GoogleFonts.openSans(
-                                fontSize: 16,
-                                color: AppColor.secondaryColor
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 15, bottom: 15),
+                            child: Text(
+                              "PUBLICAR",
+                              style: GoogleFonts.openSans(
+                                  fontSize: 16,
+                                  color: AppColor.blanco
+                              ),
                             ),
-                          ),
+                          )
                         ),
+                        const SizedBox(height: 20),
                       ],
                     ),
                   )
@@ -395,33 +471,99 @@ class _RecipeFormState extends State<RecipeForm> {
   }
 }
 
-class IngredientWidget extends StatelessWidget {
+//ignore: must_be_immutable
+class IngredientPopupWidget extends StatefulWidget {
 
-  late TextEditingController controller;
+  late IngredientModel ingredient;
 
-  IngredientWidget(this.controller, {Key? key}) : super(key: key);
+  IngredientPopupWidget({required this.ingredient, Key? key}) : super(key: key);
 
   @override
+  State<IngredientPopupWidget> createState() => _IngredientPopupWidgetState();
+}
+
+class _IngredientPopupWidgetState extends State<IngredientPopupWidget> {
+  @override
   Widget build(BuildContext context) {
-    var statusHeight = MediaQuery.of(context).viewPadding.top;
-    var size = MediaQuery.of(context).size;
-    var screenHeight = size.height - (statusHeight);
-
-    /*final controllerIngredientRecipe = TextEditingController();*/
-
-    return Expanded(
-      flex: 7,
-      child: InputText(
-          hintText: "Ex. 250g flour",
-          maxLines: 1,
-          maxLength: 55,
-          textInputType: TextInputType.text,
-          textEditingController: controller
-      ),
-    );
+    if(widget.ingredient.valueText == "") {
+      return Expanded(
+        flex: 7,
+        child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+              side: BorderSide(
+                  color: AppColor.morado_3_53c
+              )
+          ),
+          onPressed: () {
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return AlertDialogIngredient(ingredient: widget.ingredient);
+                }
+            ).then((value) {
+              setState(() {});
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(top: 18, bottom: 18),
+            child: Text(
+              "Press to add ingredient",
+              style: GoogleFonts.roboto(
+                fontSize: 14,
+                color: AppColor.morado_3_53c,
+              ),
+            ),
+          ),
+        ),
+      );
+    } else {
+      List<String> aux = widget.ingredient.valueText.split("/");
+      List<String> aux2 = aux.length == 1 ? [] : aux[0].split("&");
+      return Expanded(
+        flex: 7,
+        child: Row(
+          children: [
+            Expanded(
+              flex: 6,
+              child: Text(
+                '${aux2.isEmpty ? aux[0] : (aux2.length == 1 ? "" : (aux2[0]))} ${aux2.isEmpty ? "" : (aux2.length == 1 ? ("${aux[0]}/") : ("${aux2[1]}/"))}${aux2.isEmpty ? "" : (aux2.length == 1 ? aux[1] : aux[1])} ${widget.ingredient.dimension} ${widget.ingredient.name}',
+                style: GoogleFonts.roboto(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: AppColor.lila_2_6be
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return AlertDialogIngredient(ingredient: widget.ingredient);
+                      }
+                  ).then((value) {
+                    setState(() {});
+                  });
+                },
+                child: Icon(
+                  Icons.edit,
+                  color: AppColor.morado_1_57a,
+                  size: 24,
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
   }
 }
 
+//ignore: must_be_immutable
 class StepWidget extends StatelessWidget {
 
   late TextEditingController controller;
@@ -430,11 +572,6 @@ class StepWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var statusHeight = MediaQuery.of(context).viewPadding.top;
-    var size = MediaQuery.of(context).size;
-    var screenHeight = size.height - (statusHeight);
-
-    /*final _controllerStepRecipe = TextEditingController();*/
 
     return
       Expanded(
