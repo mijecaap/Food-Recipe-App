@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recipez/Recipe/model/ingredient.dart';
 import 'package:recipez/Recipe/ui/widgets/input_text.dart';
@@ -44,11 +45,15 @@ class _AlertDialogIngredientState extends State<AlertDialogIngredient> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: 50,
+                    width: 55,
                     child: TextFormField(
                       controller: integer,
                       textAlign: TextAlign.center,
                       maxLength: 3,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       decoration: InputDecoration(
                         filled: true,
                         counterText: '',
@@ -75,6 +80,10 @@ class _AlertDialogIngredientState extends State<AlertDialogIngredient> {
                           controller: numerator,
                           textAlign: TextAlign.center,
                           maxLength: 1,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: AppColor.gris_1_8fa,
@@ -97,6 +106,10 @@ class _AlertDialogIngredientState extends State<AlertDialogIngredient> {
                           controller: denominator,
                           textAlign: TextAlign.center,
                           maxLength: 1,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: AppColor.gris_1_8fa,
