@@ -446,7 +446,7 @@ class _RecipeFormState extends State<RecipeForm> {
 
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor.morado_3_53c
+                              primary: AppColor.morado_3_53c
                           ),
                           child: Padding(
                             padding: const EdgeInsets.only(top: 15, bottom: 15),
