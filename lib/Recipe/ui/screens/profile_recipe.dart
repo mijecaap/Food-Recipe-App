@@ -4,7 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:recipez/Recipe/bloc/bloc_recipe.dart';
 import 'package:recipez/Recipe/model/recipe_card.dart';
 import 'package:recipez/Recipe/ui/widgets/card_recipe.dart';
+import 'package:recipez/Recipe/ui/widgets/card_recipe_edit.dart';
 import 'package:recipez/Recipe/ui/widgets/grid_view_recipes.dart';
+import 'package:recipez/Recipe/ui/widgets/list_recipes_edit.dart';
 import 'package:recipez/Shared/model/app_color.dart';
 import 'package:recipez/Shared/ui/widgets/tittle_page.dart';
 import 'package:recipez/Shared/ui/widgets/title_header.dart';
@@ -164,12 +166,13 @@ class ListUserRecipes extends StatelessWidget {
                         if(snapshot.hasError) {
                           return Text(snapshot.error.toString());
                         } else if (snapshot.hasData) {
+                          //Se modifico para que apareciera con la opción de editar, solo para sus recetas creadas
                           final recipe = snapshot.data;
                           var wdgt = recipe!.map((e) {
                             final isLiked = e.likesUserId.contains(user.uid);
-                            return CardRecipe(e.id, e.photoURL, e.title, e.likes, isLiked, user.uid, false, recipeBloc);
+                            return CardRecipeEdit(e.id, e.photoURL, e.title, e.likes, isLiked, user.uid, false, recipeBloc);
                           }).toList();
-                          return ListRecipes(cardsRecipes: wdgt, type: 2);
+                          return ListRecipesEdit(cardsRecipesEdit: wdgt, type: 2);
                         } else {
                           return CircularProgressIndicator();
                         }

@@ -34,6 +34,8 @@ class RecipeBloc implements Bloc {
   // 5. Likear receta
   void updateLikeRecipe(int likes, String id, String uid, bool isLiked) => _cloudFirestoreRepository.updateLikeRecipeData(likes, id, uid, isLiked);
 
+  // 6. Update receta
+  Future<void> updateRecipeData(RecipeModel recipe, String recipeID) => _cloudFirestoreRepository.updateRecipeData(recipe,recipeID);
   @override
   void dispose() {
     // TODO: implement dispose

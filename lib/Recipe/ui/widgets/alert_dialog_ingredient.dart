@@ -196,7 +196,7 @@ class _AlertDialogIngredientState extends State<AlertDialogIngredient> {
                   const SizedBox(width: 10),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.morado_3_53c
+                        primary: AppColor.morado_3_53c
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {

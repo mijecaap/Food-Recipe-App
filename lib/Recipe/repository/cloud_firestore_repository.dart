@@ -17,7 +17,7 @@ class CloudFirestoreRepository {
 
   Future<void> createRecipeData(RecipeModel recipe, String uid) => _cloudFirestoreApi.createData(recipe, uid);
 
-  void updateRecipeData(RecipeModel recipe) => _cloudFirestoreApi.updateData(recipe);
+  Future<void> updateRecipeData(RecipeModel recipe, String recipeID) => _cloudFirestoreApi.updateData(recipe,recipeID);
 
   void updateLikeRecipeData(int likes, String id, String uid, bool isLiked) => _cloudFirestoreApi.updateLikeData(likes, id, uid, isLiked);
 }

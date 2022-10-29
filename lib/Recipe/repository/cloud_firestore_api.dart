@@ -73,8 +73,8 @@ class CloudFirestoreAPI {
     }));
   }
 
-  void updateData(RecipeModel recipe) async {
-    DocumentReference ref = _db.collection(RECIPES).doc(recipe.id);
+  Future<void> updateData(RecipeModel recipe, String recipeID) async {
+    DocumentReference ref = _db.collection(RECIPES).doc(recipeID);
     return ref.set({
       'photoURL': recipe.photoURL,
       'title': recipe.title,
