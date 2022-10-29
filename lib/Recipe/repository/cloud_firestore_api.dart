@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:recipez/Recipe/model/recipe.dart';
 import 'package:recipez/Recipe/model/recipe_card.dart';
 import 'package:recipez/Recipe/model/recipe_card.dart';
+import 'package:recipez/User/model/user.dart';
 
 class CloudFirestoreAPI {
 
@@ -72,6 +73,15 @@ class CloudFirestoreAPI {
       return RecipeModel.fromJson(snapshot.data()!, id);
     }
     return RecipeModel(photoURL: '', title: '', description: '', personQuantity: '', estimatedTime: '', ingredients: [], steps: []);
+  }
+
+  Future<UserModel> readUserById(String uid) async {
+    final ref = _db.collection(USERS).doc(uid);
+    final snapshot = await ref.get();
+    if (snapshot.exists) {
+      return UserModel.fromJson(snapshot.data()!);
+    }
+    return UserModel(uid: '', name: '', email: '', photoURL: '');
   }
 
   Future<void> createData(RecipeModel recipe, String uid) async {
