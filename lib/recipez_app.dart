@@ -45,6 +45,7 @@ class _RecipezApp extends State<RecipezApp> {
       child: Scaffold(
         extendBody: true,
         backgroundColor: AppColor.blanco,
+        resizeToAvoidBottomInset: false,
         body: Container(
           width: size.width,
           height: size.height,

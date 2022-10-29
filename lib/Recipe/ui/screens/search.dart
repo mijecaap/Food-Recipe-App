@@ -3,16 +3,143 @@ import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recipez/Recipe/bloc/bloc_recipe.dart';
 import 'package:recipez/Recipe/model/recipe_card.dart';
+import 'package:recipez/Recipe/ui/screens/main_home.dart';
 import 'package:recipez/Recipe/ui/widgets/card_recipe.dart';
+import 'package:recipez/Recipe/ui/widgets/dropDown_Menu.dart';
 import 'package:recipez/Recipe/ui/widgets/grid_view_recipes.dart';
 import 'package:recipez/Recipe/ui/widgets/list_recipes.dart';
 import 'package:recipez/Recipe/ui/widgets/search_input.dart';
 import 'package:recipez/Shared/model/app_color.dart';
-import 'package:recipez/Shared/ui/widgets/tittle_page.dart';
+
+//import 'package:recipez/Shared/ui/widgets/fitted_text.dart';
 import 'package:recipez/Shared/ui/widgets/title_header.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:recipez/Recipe/ui/widgets/input_text.dart';
+import 'package:recipez/Recipe/ui/widgets/dropDown_Menu.dart';
 
+class Search extends StatelessWidget {
+  String userId;
+  final _controllerTitleRecipe = TextEditingController();
+  late RecipeBloc recipeBloc;
+
+  Search(this.userId, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var statusHeight = MediaQuery.of(context).viewPadding.top;
+    var size = MediaQuery.of(context).size;
+    var screenHeight = size.height - (statusHeight);
+
+    return MaterialApp(
+      home: DefaultTabController(
+          length: 3,
+          child: Scaffold(
+            appBar: AppBar(
+              leading: Builder(
+                builder: (BuildContext context) {
+                  return IconButton(
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).pop(context);
+                    }
+                      ,icon: const Icon(Icons.arrow_back),
+
+                  );
+                },
+              ),
+              backgroundColor: AppColor.blanco,
+              centerTitle: true,
+              foregroundColor: AppColor.morado_3_53c,
+              bottom: TabBar(
+                indicatorColor: AppColor.lila_1_8ff,
+                labelColor: AppColor.morado_3_53c,
+                unselectedLabelColor: AppColor.lila_2_6be,
+                tabs: [
+                  Tab(text: "Platillo"),
+                  Tab(text: "Ingrediente"),
+                  Tab(text: "Usuario")
+                ],
+              ),
+              title: Text("¿que deseas cocinar?"),
+            ),
+            body: TabBarView(
+              children: [
+                Container(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 30, horizontal: 15),
+                    child: InputText(
+                        hintText: "Busqueda",
+                        maxLines: 1,
+                        maxLength: 20,
+                        textInputType: TextInputType.text,
+                        textEditingController: _controllerTitleRecipe)),
+                Container(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Flexible(
+                            flex: 1,
+                            child: TextField(
+                                style: GoogleFonts.openSans(
+                                  color: AppColor.lila_2_6be,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.all(10.0),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: AppColor.lila_2_6be),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(9.0))),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: AppColor.lila_2_6be),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(9.0))),
+                                  hintText: 'Cant.',
+                                ))),
+                        Flexible(flex: 1, child: DropdownButtonQuantity()),
+                        Flexible(
+                            flex: 2,
+                            child: TextField(
+                                style: GoogleFonts.openSans(
+                                  color: AppColor.lila_2_6be,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.all(10.0),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: AppColor.lila_2_6be),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(9.0))),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: AppColor.lila_2_6be),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(9.0))),
+                                  hintText: 'Ingrediente',
+                                )))
+                      ]),
+                ),
+                Container(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 30, horizontal: 15),
+                    child: InputText(
+                        hintText: "Busqueda",
+                        maxLines: 1,
+                        maxLength: 20,
+                        textInputType: TextInputType.text,
+                        textEditingController: _controllerTitleRecipe))
+              ],
+            ),
+          )),
+    );
+  }
+
+/*
 class Search extends StatelessWidget {
 
   String userId;
@@ -23,7 +150,7 @@ class Search extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+
 
     var statusHeight = MediaQuery.of(context).viewPadding.top;
     var size = MediaQuery.of(context).size;
@@ -62,13 +189,13 @@ class Search extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: screenHeight / 48),
-                        TittlePage(text: "Search Recipes")
+                        FittedText(heightBox: screenHeight / 24, firstText: "", boldText: "¿Que deseas cocinar?")
                       ],
                     ),
                     InputText(
-                        hintText: "Search",
+                        hintText: "Busqueda",
                         maxLines: 1,
-                        maxLength: 15,
+                        maxLength: 20,
                         textInputType: TextInputType.text,
                         textEditingController: _controllerTitleRecipe
                     ),
@@ -101,7 +228,7 @@ class Search extends StatelessWidget {
   }
 }
 
-/*
+
 ListView(
           physics: BouncingScrollPhysics(),
           children: [
@@ -111,5 +238,5 @@ ListView(
                 content: ListRecipes(cardsRecipes: cards, type: 0)
             )
           ],
-        ),
-*/
+        ),*/
+}
