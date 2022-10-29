@@ -6,6 +6,7 @@ import 'package:recipez/Recipe/model/recipe.dart';
 import 'package:recipez/Recipe/model/recipe_card.dart';
 import 'package:recipez/Recipe/repository/cloud_storage_repository.dart';
 import 'package:recipez/Recipe/repository/cloud_firestore_repository.dart';
+import 'package:recipez/User/model/user.dart';
 
 class RecipeBloc implements Bloc {
 
@@ -33,6 +34,8 @@ class RecipeBloc implements Bloc {
 
   // 4. Leer Receta por Id
   Future<RecipeModel> readRecipeById(String id) => _cloudFirestoreRepository.readRecipeDataById(id);
+  // Leer Usuario por Id
+  Future<UserModel> readUserById(String uid) => _cloudFirestoreRepository.readUserById(uid);
 
   // 5. Likear receta
   void updateLikeRecipe(int likes, String id, String uid, bool isLiked) => _cloudFirestoreRepository.updateLikeRecipeData(likes, id, uid, isLiked);

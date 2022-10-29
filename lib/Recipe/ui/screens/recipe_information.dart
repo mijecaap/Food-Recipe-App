@@ -1,3 +1,4 @@
+import 'package:card_loading/card_loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
@@ -6,6 +7,7 @@ import 'package:recipez/Recipe/model/recipe.dart';
 import 'package:recipez/Recipe/model/recipe_info.dart';
 import 'package:recipez/Shared/model/app_color.dart';
 import 'package:recipez/Shared/ui/widgets/tittle_page.dart';
+import 'package:recipez/User/model/user.dart';
 import 'package:recipez/User/ui/widgets/profile_container.dart';
 
 import '../../bloc/bloc_recipe.dart';
@@ -75,7 +77,7 @@ class RecipeInformation extends StatelessWidget {
                                         bottomRight: Radius.circular(screenHeight / 96)
                                     )
                                 ),
-                                child: Image(image: NetworkImage(recipe.photoURL), fit: BoxFit.fill)
+                                child: Image(image: NetworkImage(recipe.photoURL), fit: BoxFit.cover)
                             ),
                             SafeArea(
                               child: Row(
@@ -98,7 +100,72 @@ class RecipeInformation extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(height: screenHeight / 96),
+                      SizedBox(height: screenHeight / 48),
+                      FutureBuilder<UserModel?>(
+                        future: recipeBloc.readUserById(recipe.userId!),
+                        builder: (_, snapshot) {
+                          if (!snapshot.hasData || snapshot.hasError) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                  left: screenHeight / 48,
+                                  right: screenHeight / 48
+                              ),
+                              child: const CardLoading(
+                                height: 54,
+                                borderRadius: BorderRadius.all(Radius.circular(15)),
+                              ),
+                            );
+                          } else{
+                            final user = snapshot.data;
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                  left: screenHeight / 48,
+                                  right: screenHeight / 48
+                              ),
+                              child: Container(
+                                height: 54,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    color: AppColor.gris_1_8fa,
+                                    borderRadius: BorderRadius.all(Radius.circular(15))
+                                ),
+                                padding: const EdgeInsets.only(
+                                    left: 20,
+                                    right: 20,
+                                    top: 10,
+                                    bottom: 10
+                                ),
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      height: 32,
+                                      width: 32,
+                                      child: CircleAvatar(
+                                        radius: 16,
+                                        backgroundImage: NetworkImage(user!.photoURL),
+                                        onBackgroundImageError: (Object exception, StackTrace? stackTrace) {
+                                          return;
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Text(
+                                        user.name,
+                                        style: GoogleFonts.roboto(
+                                            color: AppColor.negro,
+                                            fontSize: 16
+                                        ),
+                                      )
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                      SizedBox(height: screenHeight / 48),
                       Padding(
                         padding: EdgeInsets.only(
                             left: screenHeight / 48,
