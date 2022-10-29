@@ -19,13 +19,34 @@ class CloudFirestoreAPI {
       .map((snapshot) => snapshot.docs.map((doc) => RecipeCardModel.fromJson(doc.data(), doc.id)).toList());
   }
 
-  Stream<List<RecipeCardModel>> readOrderLikesData(String userId) {
+  Stream<List<RecipeCardModel>> readOrderLikesData(String userId, bool limit) {
     return _db
       .collection(RECIPES)
-      .where('userId', isNotEqualTo: userId )
+      .where('likes', isGreaterThan: 0 )
       .orderBy('likes', descending: true)
+      .limit(limit ? 4 : 10)
       .snapshots()
-      .map((snapshot) => snapshot.docs.map((doc) => RecipeCardModel.fromJson(doc.data(), doc.id)).toList());
+      .map((snapshot) => snapshot.docs.where((doc) => doc['userId'] != userId).map((doc) => RecipeCardModel.fromJson(doc.data(), doc.id)).toList());
+  }
+
+  Stream<List<RecipeCardModel>> readOrderDateData(String userId, bool limit) {
+    return _db
+        .collection(RECIPES)
+        .where('dateCreation', isGreaterThan: DateTime(DateTime.now().year, DateTime.now().month))
+        .orderBy('dateCreation', descending: true)
+        .limit(limit ? 4 : 10)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.where((doc) => doc['userId'] != userId).map((doc) => RecipeCardModel.fromJson(doc.data(), doc.id)).toList());
+  }
+
+  Stream<List<RecipeCardModel>> readOrderViewsData(String userId, bool limit) {
+    return _db
+        .collection(RECIPES)
+        .where('views', isGreaterThan: 0 )
+        .orderBy('views', descending: true)
+        .limit(limit ? 4 : 10)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.where((doc) => doc['userId'] != userId).map((doc) => RecipeCardModel.fromJson(doc.data(), doc.id)).toList());
   }
   
   Stream<List<RecipeCardModel>> readFavoritesData(List<String> favoritesId) {

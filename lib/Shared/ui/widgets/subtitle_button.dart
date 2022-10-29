@@ -23,11 +23,11 @@ class SubtitleButton extends StatelessWidget {
             color: AppColor.morado_2_347
           ),
         ),
-        Icon(
+        /*Icon(
           Icons.arrow_forward,
           size: 20,
           color: AppColor.morado_2_347,
-        )
+        )*/
       ],
     );
 

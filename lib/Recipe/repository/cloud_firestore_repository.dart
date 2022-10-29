@@ -7,6 +7,10 @@ class CloudFirestoreRepository {
   final _cloudFirestoreApi = CloudFirestoreAPI();
 
   Stream<List<RecipeCardModel>> readAllRecipeData(String userId) => _cloudFirestoreApi.readAllData(userId);
+  Stream<List<RecipeCardModel>> readOrderLikesData(String userId, bool limit) => _cloudFirestoreApi.readOrderLikesData(userId,limit);
+  Stream<List<RecipeCardModel>> readOrderDateData(String userId, bool limit) => _cloudFirestoreApi.readOrderDateData(userId,limit);
+  Stream<List<RecipeCardModel>> readOrderViewsData(String userId, bool limit) => _cloudFirestoreApi.readOrderViewsData(userId,limit);
+
 
   Stream<List<RecipeCardModel>> readFavoritesRecipeData(List<String> favorites) => _cloudFirestoreApi.readFavoritesData(favorites);
   Stream<List<RecipeCardModel>> readMyRecipesData(List<String> myRecipes) => _cloudFirestoreApi.readMyRecipesData(myRecipes);
