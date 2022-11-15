@@ -29,10 +29,11 @@ class CloudFirestoreAPI {
     return UserModel(uid: '', name: '', email: '', photoURL: '');
   }
 
-  void updateSubscriptionData(String uid, bool subscription) async {
+  void updateSubscriptionData(String uid, bool subscription, String number) async {
     DocumentReference refUser = _db.collection(USERS).doc(uid);
     return refUser.update({
-      'subscription': !subscription,
+      'subscription': subscription,
+      'idPayment': number
     });
   }
 

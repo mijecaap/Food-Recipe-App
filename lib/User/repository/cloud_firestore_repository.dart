@@ -9,5 +9,5 @@ class CloudFirestoreRepository {
 
   Future<UserModel> readUserData(String uid) => _cloudFirestoreAPI.readData(uid);
 
-  void updateSubscriptionData(String uid, bool subscription) => _cloudFirestoreAPI.updateSubscriptionData(uid, subscription);
+  void updateSubscriptionData(String uid, bool subscription, String number) => _cloudFirestoreAPI.updateSubscriptionData(uid, subscription, number);
 }

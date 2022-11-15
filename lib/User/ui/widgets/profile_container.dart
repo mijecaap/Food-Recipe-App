@@ -1,3 +1,4 @@
+import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:card_loading/card_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
@@ -6,6 +7,7 @@ import 'package:recipez/Recipe/ui/widgets/options_action_sheet.dart';
 import 'package:recipez/Shared/model/app_color.dart';
 import 'package:recipez/User/bloc/bloc_user.dart';
 import 'package:recipez/User/model/user.dart';
+import 'package:recipez/payment.dart';
 
 class ProfileContainer extends StatelessWidget {
   late UserBloc userBloc;
@@ -36,9 +38,9 @@ class ProfileContainer extends StatelessWidget {
               future: userBloc.futureAccessToken,
               builder: (BuildContext context, AsyncSnapshot snapshotToken) {
                 if (snapshotToken.hasData) {
-                  return showProfileData(snapshot, snapshotToken);
+                  return showProfileData(snapshot, snapshotToken, context);
                 }
-                return showProfileData(snapshot, snapshotToken);
+                return showProfileData(snapshot, snapshotToken, context);
               },
             );
           case ConnectionState.done:
@@ -46,7 +48,7 @@ class ProfileContainer extends StatelessWidget {
               future: userBloc.futureAccessToken,
               builder: (BuildContext context, AsyncSnapshot snapshotToken) {
                 if (snapshotToken.hasData) {
-                  return showProfileData(snapshot, snapshotToken);
+                  return showProfileData(snapshot, snapshotToken, context);
                 }
                 return Container();
               },
@@ -56,7 +58,7 @@ class ProfileContainer extends StatelessWidget {
     );
   }
 
-  Widget showProfileData(AsyncSnapshot snapshot, AsyncSnapshot snapshotToken) {
+  Widget showProfileData(AsyncSnapshot snapshot, AsyncSnapshot snapshotToken, context) {
     if (!snapshot.hasData || snapshot.hasError) {
       return const CardLoading(
         height: 54,
@@ -124,16 +126,68 @@ class ProfileContainer extends StatelessWidget {
                 ],
               ),
             ),
-            OptionsActionSheet(
+            GestureDetector(
+              onTap: () {
+                userBloc.getUserId()
+                    .then((value) => userBloc.readUser(value)
+                    .then((value) {
+                      if(!value.subscription!){
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (BuildContext context) => PaypalPayment(
+                            onFinish: (number) async {
+
+                            // payment done
+                            userBloc.getUserId()
+                                .then((value) => userBloc.readUser(value)
+                                .then((value) => userBloc.updateSubscriptionData(value.uid, true, number)));
+
+
+                            },
+                          ),
+                        ));
+                      } else {
+                        ArtSweetAlert.show(
+                            context: context,
+                            artDialogArgs: ArtDialogArgs(
+                              type: ArtSweetAlertType.info,
+                              title: "Ya se encuentra suscrito",
+                            )
+                        );
+                      }
+                }));
+                /*
+                );*/
+              },
+              child: const Icon(
+                Icons.more_horiz,
+                size: 24,
+              ),
+            )
+            /*OptionsActionSheet(
               onPressed: () {
                 userBloc.signOut();
               },
               onPressed2: () {
-                userBloc.getUserId()
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) => PaypalPayment(
+                      onFinish: (number) async {
+
+                        // payment done
+                        print('id: '+number);
+
+                      },
+                    ),
+                  ),
+                );
+
+                /*
+                  userBloc.getUserId()
                     .then((value) => userBloc.readUser(value)
                     .then((value) => userBloc.updateSubscriptionData(value.uid, value.subscription!)));
+
+                 */
               },
-            ),
+            ),*/
           ],
         ),
       );
