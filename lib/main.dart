@@ -28,14 +28,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      child: MaterialApp(
+      bloc: UserBloc(),
+      child: const MaterialApp(
         useInheritedMediaQuery: true,
         /*locale: DevicePreview.locale(context),
         builder: DevicePreview.appBuilder,*/
         title: 'Recipez',
         home: SignIn(),
       ),
-      bloc: UserBloc(),
     );
   }
 }

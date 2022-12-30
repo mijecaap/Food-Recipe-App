@@ -15,34 +15,26 @@ class CardRecipe extends StatelessWidget {
   String id;
   String imageRecipe;
   String titleRecipe;
-  int likes;
-  bool isLiked;
+  bool isViewed;
   String uid;
   bool isMain;
   RecipeBloc recipeBloc;
   //
 
-  CardRecipe(this.id, this.imageRecipe, this.titleRecipe, this.likes, this.isLiked, this.uid, this.isMain, this.recipeBloc, {Key? key}) : super(key: key);
+  CardRecipe(this.id, this.imageRecipe, this.titleRecipe, this.isViewed, this.uid, this.isMain, this.recipeBloc, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
 
-    var statusHeight = MediaQuery.of(context).viewPadding.top;
-    var size = MediaQuery.of(context).size;
-    var screenHeight = (size.height - (statusHeight)) / 4;
-
-    /*var size = MediaQuery.of(context).size;
-    var itemWidth = size.width / 2;
-    var screenHeight = size.height / 4;*/
-
     return GestureDetector(
       onTap: () {
+        if(isViewed) recipeBloc.updateViews(id);
         Navigator.push(context, MaterialPageRoute(
             builder: (context) {
               return BlocProvider(
                 bloc: RecipeBloc(),
-                child: RecipeInformation(id),
+                child: RecipeInformation(id, uid, isMain),
               );
             })
         );
@@ -50,7 +42,7 @@ class CardRecipe extends StatelessWidget {
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(screenHeight / 24)
+            borderRadius: BorderRadius.circular(15)
         ),
         child: Stack(
           children: [
@@ -75,48 +67,28 @@ class CardRecipe extends StatelessWidget {
                   ],
                 ),
               ),
-              padding: EdgeInsets.all(screenHeight / 24),
-              child: Container(
-                child: AutoSizeText(
-                  titleRecipe,
+              padding: const EdgeInsets.all(10),
+              child: AutoSizeText(
+                titleRecipe[0].toUpperCase() + titleRecipe.substring(1),
+                style: GoogleFonts.openSans(
+                  color: AppColor.thirdyColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500
+                ),
+                maxLines: 1,
+                presetFontSizes: [20],
+                overflowReplacement: Marquee(
+                  text: titleRecipe[0].toUpperCase() + titleRecipe.substring(1),
+                  blankSpace: 80,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   style: GoogleFonts.openSans(
                     color: AppColor.thirdyColor,
-                    fontSize: screenHeight / 9,
+                    fontSize: 20,
                     fontWeight: FontWeight.w500
-                  ),
-                  maxLines: 1,
-                  presetFontSizes: [screenHeight / 9],
-                  overflowReplacement: Marquee(
-                    text: titleRecipe,
-                    blankSpace: 80,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    style: GoogleFonts.openSans(
-                      color: AppColor.thirdyColor,
-                      fontSize: screenHeight / 9,
-                      fontWeight: FontWeight.w500
-                    ),
-                  ),
-                )
-              )
-            ),
-            isMain ? Container(
-              alignment: Alignment.topRight,
-              padding: EdgeInsets.all(screenHeight / 24),
-              child: GestureDetector(
-                onTap: () {
-                  recipeBloc.updateLikeRecipe(likes, id, uid, isLiked);
-                },
-                child: CircleAvatar(
-                  backgroundColor: AppColor.thirdyColor,
-                  radius: screenHeight / 10,
-                  child: Icon(
-                    isLiked ? Icons.favorite : Icons.favorite_border_outlined,
-                    size: screenHeight / 8,
-                    color: AppColor.backgroundColor,
                   ),
                 ),
               )
-            ) : Container(),
+            ),
           ],
         ),
       ),

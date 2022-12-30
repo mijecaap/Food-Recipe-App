@@ -126,8 +126,9 @@ class ProfileContainer extends StatelessWidget {
                 ],
               ),
             ),
-            GestureDetector(
+            /*GestureDetector(
               onTap: () {
+                /*userBloc.signOut();*/
                 userBloc.getUserId()
                     .then((value) => userBloc.readUser(value)
                     .then((value) {
@@ -155,30 +156,44 @@ class ProfileContainer extends StatelessWidget {
                         );
                       }
                 }));
-                /*
-                );*/
               },
               child: const Icon(
                 Icons.more_horiz,
                 size: 24,
               ),
-            )
-            /*OptionsActionSheet(
+            )*/
+            OptionsActionSheet(
               onPressed: () {
                 userBloc.signOut();
               },
               onPressed2: () {
-                Navigator.push(context, MaterialPageRoute(
-                    builder: (BuildContext context) => PaypalPayment(
-                      onFinish: (number) async {
+                userBloc.getUserId()
+                    .then((value) => userBloc.readUser(value)
+                    .then((value) {
+                  if(!value.subscription!){
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (BuildContext context) => PaypalPayment(
+                        onFinish: (number) async {
 
-                        // payment done
-                        print('id: '+number);
+                          // payment done
+                          userBloc.getUserId()
+                              .then((value) => userBloc.readUser(value)
+                              .then((value) => userBloc.updateSubscriptionData(value.uid, true, number)));
 
-                      },
-                    ),
-                  ),
-                );
+
+                        },
+                      ),
+                    ));
+                  } else {
+                    ArtSweetAlert.show(
+                        context: context,
+                        artDialogArgs: ArtDialogArgs(
+                          type: ArtSweetAlertType.info,
+                          title: "Ya se encuentra suscrito",
+                        )
+                    );
+                  }
+                }));
 
                 /*
                   userBloc.getUserId()
@@ -187,7 +202,7 @@ class ProfileContainer extends StatelessWidget {
 
                  */
               },
-            ),*/
+            ),
           ],
         ),
       );

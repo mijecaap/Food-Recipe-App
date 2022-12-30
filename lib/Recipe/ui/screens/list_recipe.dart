@@ -56,7 +56,7 @@ class ListRecipe extends StatelessWidget {
                     } else if (snapshot.hasData) {
                       final recipe = snapshot.data;
                       var wdgt = recipe!.map((e) {
-                        return CardRecipe(e.id, e.photoURL, e.title, e.likes, false, userId, false, recipeBloc);
+                        return CardRecipe(e.id, e.photoURL, e.title, true, userId, false, recipeBloc);
                       }).toList();
                       return ListView(
                         physics: BouncingScrollPhysics(),

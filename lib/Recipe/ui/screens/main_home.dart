@@ -97,7 +97,7 @@ class ContainerRecipes extends StatelessWidget {
               stream: recipeBloc.readOrderLikesData(userId,true),
               builder: (context, snapshot){
                 if (snapshot.hasError){
-                  return const Text('Ocurrió un error');
+                  return Text(snapshot.error.toString());
                 } else if (snapshot.hasData) {
                   final recipe = snapshot.data;
                   return SizedBox(
@@ -109,8 +109,7 @@ class ContainerRecipes extends StatelessWidget {
                       itemBuilder: (_, index) {
                         if(recipe.length != index){
                           var e = recipe[index];
-                          final isLiked = e.likesUserId.contains(userId);
-                          return CardRecipeHome(e.id, e.photoURL, e.title, e.likes, isLiked, userId, true, recipeBloc);
+                          return CardRecipeHome(e.id, e.photoURL, e.title, e.personQuantity, e.estimatedTime, userId, true, recipeBloc);
                         } else {
                           return SizedBox(
                               width: 120,
@@ -180,8 +179,7 @@ class ContainerRecipes extends StatelessWidget {
                       itemBuilder: (_, index) {
                         if(recipe.length != index){
                           var e = recipe[index];
-                          final isLiked = e.likesUserId.contains(userId);
-                          return CardRecipeHome(e.id, e.photoURL, e.title, e.likes, isLiked, userId, true, recipeBloc);
+                          return CardRecipeHome(e.id, e.photoURL, e.title, e.personQuantity, e.estimatedTime, userId, true, recipeBloc);
                         } else {
                           return SizedBox(
                               width: 120,
@@ -239,7 +237,7 @@ class ContainerRecipes extends StatelessWidget {
               stream: recipeBloc.readOrderDateData(userId,true),
               builder: (context, snapshot){
                 if (snapshot.hasError){
-                  return const Text('Ocurrió un error');
+                  return Text(snapshot.error.toString());
                 } else if (snapshot.hasData) {
                   final recipe = snapshot.data;
                   return SizedBox(
@@ -251,8 +249,7 @@ class ContainerRecipes extends StatelessWidget {
                       itemBuilder: (_, index) {
                         if(recipe.length != index){
                           var e = recipe[index];
-                          final isLiked = e.likesUserId.contains(userId);
-                          return CardRecipeHome(e.id, e.photoURL, e.title, e.likes, isLiked, userId, true, recipeBloc);
+                          return CardRecipeHome(e.id, e.photoURL, e.title, e.personQuantity, e.estimatedTime, userId, true, recipeBloc);
                         } else {
                           return SizedBox(
                               width: 120,
@@ -303,103 +300,3 @@ class ContainerRecipes extends StatelessWidget {
     );
   }
 }
-
-
-
-/*class MainHome extends StatelessWidget {
-  
-  late UserBloc userBloc;
-
-  MainHome({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    var statusHeight = MediaQuery.of(context).viewPadding.top;
-    var size = MediaQuery.of(context).size;
-    var screenHeight = size.height - (statusHeight);
-    
-    userBloc = BlocProvider.of(context);
-
-    return SafeArea(
-        child: Container(
-          padding: EdgeInsets.only(
-            top: 40,
-            right: 20,
-            left: 20
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TittlePage(text: "All recipes for you"),
-              SizedBox(height: 30),
-              ButtonSearch(userBloc: userBloc),
-              SizedBox(height: 30),
-              BlocProvider(
-                bloc: RecipeBloc(),
-                child: FutureBuilder(
-                  future: userBloc.getUserId(),
-                  builder: (_, snapshot) {
-                    if(snapshot.hasError){
-                      return Text("No se encontró su id");
-                    } else if (snapshot.hasData) {
-                      final userId = snapshot.data.toString();
-                      return ContainerRecipes(userId: userId);
-                    } else {
-                      return Text("CARGANDO");
-                    }
-                  },
-                ),
-              )
-            ],
-          ),
-        )
-    );
-
-  }
-  
-}
-
-class ContainerRecipes extends StatelessWidget {
-
-  late RecipeBloc recipeBloc;
-  String userId;
-
-  ContainerRecipes({required this.userId, Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-
-    recipeBloc = BlocProvider.of(context);
-
-    return Flexible(
-        child: StreamBuilder<List<RecipeCardModel>>(
-          stream: recipeBloc.readOrderLikesData(userId),
-          builder: (context, snapshot){
-            if (snapshot.hasError){
-              return Text('Ocurrió un error');
-            } else if (snapshot.hasData) {
-              final recipe = snapshot.data;
-              var wdgt = recipe!.map((e) {
-                final isLiked = e.likesUserId.contains(userId);
-                return CardRecipe(e.id, e.photoURL, e.title, e.likes, isLiked, userId, true, recipeBloc);
-              }).toList();
-              return ListView(
-                shrinkWrap: true,
-                physics: BouncingScrollPhysics(),
-                children: [
-                  const SubtitleButton(text: "Most Popular"),
-                  GridViewRecipes(cardsRecipes: wdgt),
-                  /*const SubtitleButton(colorText: "New ", secondText: "recipes"),
-                    GridViewRecipes(cardsRecipes: cards),*/
-                  const SizedBox(height: 20)
-                ],
-              );
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
-          },
-        )
-    );
-  }
-}*/
