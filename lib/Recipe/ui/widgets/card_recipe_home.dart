@@ -15,14 +15,14 @@ class CardRecipeHome extends StatelessWidget {
   String id;
   String imageRecipe;
   String titleRecipe;
-  int likes;
-  bool isLiked;
+  String personQuantity;
+  String estimatedTime;
   String uid;
   bool isMain;
   RecipeBloc recipeBloc;
   //
 
-  CardRecipeHome(this.id, this.imageRecipe, this.titleRecipe, this.likes, this.isLiked, this.uid, this.isMain, this.recipeBloc, {Key? key}) : super(key: key);
+  CardRecipeHome(this.id, this.imageRecipe, this.titleRecipe, this.personQuantity, this.estimatedTime, this.uid, this.isMain, this.recipeBloc, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +38,12 @@ class CardRecipeHome extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
+        recipeBloc.updateViews(id);
         Navigator.push(context, MaterialPageRoute(
             builder: (context) {
               return BlocProvider(
                 bloc: RecipeBloc(),
-                child: RecipeInformation(id),
+                child: RecipeInformation(id, uid, false),
               );
             })
         );
@@ -80,7 +81,7 @@ class CardRecipeHome extends StatelessWidget {
                 padding: EdgeInsets.all(screenHeight / 24),
                 child: Container(
                     child: AutoSizeText(
-                      titleRecipe,
+                      titleRecipe[0].toUpperCase() + titleRecipe.substring(1),
                       style: GoogleFonts.openSans(
                           color: AppColor.thirdyColor,
                           fontSize: screenHeight / 9,
@@ -89,7 +90,7 @@ class CardRecipeHome extends StatelessWidget {
                       maxLines: 1,
                       presetFontSizes: [screenHeight / 9],
                       overflowReplacement: Marquee(
-                        text: titleRecipe,
+                        text: titleRecipe[0].toUpperCase() + titleRecipe.substring(1),
                         blankSpace: 80,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         style: GoogleFonts.openSans(
@@ -101,23 +102,36 @@ class CardRecipeHome extends StatelessWidget {
                     )
                 )
             ),
-            isMain ? Container(
-                alignment: Alignment.topRight,
-                padding: EdgeInsets.all(screenHeight / 24),
-                child: GestureDetector(
-                  onTap: () {
-                    recipeBloc.updateLikeRecipe(likes, id, uid, isLiked);
-                  },
-                  child: CircleAvatar(
-                    backgroundColor: AppColor.thirdyColor,
-                    radius: screenHeight / 10,
-                    child: Icon(
-                      isLiked ? Icons.favorite : Icons.favorite_border_outlined,
-                      size: screenHeight / 8,
-                      color: AppColor.backgroundColor,
+            isMain ? Positioned(
+              top: 16,
+              right: 16,
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                color: AppColor.blanco.withOpacity(0.8),
+                child: Row(
+                  children: [
+                    Icon(Icons.group, size: 16, color: AppColor.morado_1_57a),
+                    const SizedBox(width: 8),
+                    Text(
+                      personQuantity,
+                      style: GoogleFonts.roboto(
+                          fontSize: 12,
+                          color: AppColor.morado_1_57a
+                      ),
                     ),
-                  ),
-                )
+                    const SizedBox(width: 16),
+                    Icon(Icons.schedule, size: 16, color: AppColor.morado_1_57a),
+                    const SizedBox(width: 8),
+                    Text(
+                      "${estimatedTime} min",
+                      style: GoogleFonts.roboto(
+                          fontSize: 12,
+                          color: AppColor.morado_1_57a
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ) : Container(),
           ],
         ),

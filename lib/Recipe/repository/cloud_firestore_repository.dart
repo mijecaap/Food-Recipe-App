@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:recipez/Recipe/model/ingredient.dart';
 import 'package:recipez/Recipe/model/recipe.dart';
 import 'package:recipez/Recipe/model/recipe_card.dart';
 import 'package:recipez/Recipe/repository/cloud_firestore_api.dart';
@@ -17,13 +18,19 @@ class CloudFirestoreRepository {
   Stream<List<RecipeCardModel>> readMyRecipesData(List<String> myRecipes) => _cloudFirestoreApi.readMyRecipesData(myRecipes);
 
   Stream<List<RecipeCardModel>> readSearchData(String text, String userId) => _cloudFirestoreApi.readSearchData(text, userId);
+  Future<List<RecipeCardModel>> readSearchIngredientData(String name, int value, String dimension, String userId) => _cloudFirestoreApi.readSearchIngredientsData(name, value, dimension, userId);
 
   Future<RecipeModel> readRecipeDataById(String id) => _cloudFirestoreApi.readDataById(id);
   Future<UserModel> readUserById(String uid) => _cloudFirestoreApi.readUserById(uid);
+  Future<List<DocumentSnapshot<Object?>>> readIngredientById(List<dynamic> listId) => _cloudFirestoreApi.readIngredientById(listId);
 
   Future<void> createRecipeData(RecipeModel recipe, String uid) => _cloudFirestoreApi.createData(recipe, uid);
+  Future<DocumentReference<Object?>> createIngredientData(IngredientModel ingredient) => _cloudFirestoreApi.createIngredient(ingredient);
 
-  void updateRecipeData(RecipeModel recipe) => _cloudFirestoreApi.updateData(recipe);
+  Future<void> updateRecipeData(RecipeModel recipe) => _cloudFirestoreApi.updateData(recipe);
 
   void updateLikeRecipeData(int likes, String id, String uid, bool isLiked) => _cloudFirestoreApi.updateLikeData(likes, id, uid, isLiked);
+  void updateReportRecipeData(String id, String uid, String text) => _cloudFirestoreApi.updateReportData(id, uid, text);
+
+  void updateViews(String id) => _cloudFirestoreApi.updateViews(id);
 }

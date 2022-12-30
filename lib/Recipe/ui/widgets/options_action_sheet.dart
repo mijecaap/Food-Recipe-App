@@ -26,25 +26,27 @@ class _OptionsActionSheetState extends State<OptionsActionSheet> {
         actions: [
           CupertinoActionSheetAction(
             onPressed: () {
-              widget.onPressed2();
               Navigator.pop(context);
+              widget.onPressed2();
             },
             child: Text(
               "Subscribe",
               style: GoogleFonts.openSans(
-                color: AppColor.secondaryColor.withBlue(30)
+                color: AppColor.morado_3_53c
               ),
             ),
           ),
           CupertinoActionSheetAction(
             isDestructiveAction: true,
             onPressed: () {
-              widget.onPressed();
               Navigator.pop(context);
+              widget.onPressed();
             },
             child: Text(
               "Sign Out",
-              style: GoogleFonts.openSans(),
+              style: GoogleFonts.openSans(
+                color: AppColor.rojo_f59
+              ),
             ),
           )
         ],

@@ -17,6 +17,7 @@ class TittlePage extends StatelessWidget {
           fontWeight: FontWeight.w500,
           fontSize: 30
       ),
+      overflow: TextOverflow.ellipsis,
     );
   }
 }

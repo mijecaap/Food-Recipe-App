@@ -149,8 +149,7 @@ class ListUserRecipes extends StatelessWidget {
                         } else if (snapshot.hasData) {
                           final recipe = snapshot.data;
                           var wdgt = recipe!.map((e) {
-                            final isLiked = e.likesUserId.contains(user.uid);
-                            return CardRecipe(e.id, e.photoURL, e.title, e.likes, isLiked, user.uid, false, recipeBloc);
+                            return CardRecipe(e.id, e.photoURL, e.title, false, user.uid, false, recipeBloc);
                           }).toList();
                           return ListRecipes(cardsRecipes: wdgt, type: 1);
                         } else {
@@ -166,8 +165,7 @@ class ListUserRecipes extends StatelessWidget {
                         } else if (snapshot.hasData) {
                           final recipe = snapshot.data;
                           var wdgt = recipe!.map((e) {
-                            final isLiked = e.likesUserId.contains(user.uid);
-                            return CardRecipe(e.id, e.photoURL, e.title, e.likes, isLiked, user.uid, false, recipeBloc);
+                            return CardRecipe(e.id, e.photoURL, e.title, false, user.uid, true, recipeBloc);
                           }).toList();
                           return ListRecipes(cardsRecipes: wdgt, type: 2);
                         } else {

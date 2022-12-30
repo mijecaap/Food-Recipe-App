@@ -43,7 +43,7 @@ class UserBloc implements Bloc {
   // 5. Conseguir favorites and my recipes
   Future<UserModel> readUser(String uid) => _cloudFirestoreRepository.readUserData(uid);
 
-  void updateSubscriptionData(String uid, bool subscription) => _cloudFirestoreRepository.updateSubscriptionData(uid, subscription);
+  void updateSubscriptionData(String uid, bool subscription, String number) => _cloudFirestoreRepository.updateSubscriptionData(uid, subscription, number);
 
   @override
   void dispose() {

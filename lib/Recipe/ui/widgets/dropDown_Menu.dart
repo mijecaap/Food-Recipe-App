@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:recipez/Shared/model/app_color.dart';
 
-const List<String> list = <String>['Oz', 'Kg', 'Und', 'Ml'];
+const List<String> list = <String>['kg', 'gr', 'lt', 'unid'];
 
 class DropdownButtonQuantity extends StatefulWidget {
-  const DropdownButtonQuantity({super.key});
+  late String dropdownValue;
+  late void Function(dynamic) pickValue;
+  DropdownButtonQuantity({required this.dropdownValue, required this.pickValue, Key? key}) : super(key: key);
 
   @override
   State<DropdownButtonQuantity> createState() => _DropdownButtonQuantityState();
 }
 
 class _DropdownButtonQuantityState extends State<DropdownButtonQuantity> {
-  String dropdownValue = list.first;
-
   @override
   Widget build(BuildContext context) {
+
+    if(widget.dropdownValue == "") {
+      widget.dropdownValue = list.first;
+    }
+
     return DropdownButton<String>(
-      value: dropdownValue,
+      value: widget.dropdownValue,
       elevation: 16,
       style: const TextStyle(color: Colors.deepPurpleAccent),
       underline: Container(
@@ -25,9 +30,10 @@ class _DropdownButtonQuantityState extends State<DropdownButtonQuantity> {
       ),
       onChanged: (String? value) {
         // This is called when the user selects an item.
-        setState(() {
-          dropdownValue = value!;
-        });
+        widget.pickValue(value);
+        /*setState(() {
+          widget.dropdownValue = value!;
+        });*/
       },
       items: list.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
