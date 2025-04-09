@@ -38,7 +38,10 @@ class UserBloc implements Bloc {
   void updateUserData(UserModel user) => _cloudFirestoreRepository.updateUserDataFirestore(user);
 
   // 4. Conseguir uid del usuario
-  Future<String> getUserId() => _auth_repository.getUserUid();
+  Future<String> getUserId() async {
+    final uid = await _auth_repository.getUserUid();
+    return uid ?? (throw Exception('User ID not found'));
+  }
 
   // 5. Conseguir favorites and my recipes
   Future<UserModel> readUser(String uid) => _cloudFirestoreRepository.readUserData(uid);

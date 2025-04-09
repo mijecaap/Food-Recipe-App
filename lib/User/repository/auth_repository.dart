@@ -10,5 +10,5 @@ class AuthRepository {
 
   signOut() => _firebaseAuthApi.signOut();
 
-  Future<String> getUserUid() => _firebaseAuthApi.getUid();
+  Future<String?> getUserUid() => _firebaseAuthApi.getUid();
 }

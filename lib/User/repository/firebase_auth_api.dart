@@ -9,19 +9,25 @@ class FirebaseAuthAPI {
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
   Future<User?> signIn() async {
-    GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
-    GoogleSignInAuthentication? gSA = await googleSignInAccount?.authentication;
-
-    OAuthCredential credential = GoogleAuthProvider.credential(
-      idToken: gSA?.idToken,
-      accessToken: gSA?.accessToken
+  try {
+    final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+    if (googleSignInAccount == null) return null;
+    
+    final GoogleSignInAuthentication gSA = await googleSignInAccount.authentication;
+    
+    final OAuthCredential credential = GoogleAuthProvider.credential(
+      idToken: gSA.idToken,
+      accessToken: gSA.accessToken
     );
 
-    UserCredential authResult = await _auth.signInWithCredential(credential);
-    User? user = authResult.user;
-
-    return user;
+    final UserCredential authResult = await _auth.signInWithCredential(credential);
+    return authResult.user;
+    
+  } catch (error) {
+    print('Error en el inicio de sesión con Google: $error');
+    return null;
   }
+}
 
   Future<User?> singInFacebook() async {
     // Trigger the sign-in flow
@@ -42,8 +48,12 @@ class FirebaseAuthAPI {
     googleSignIn.signOut();
   }
 
-  Future<String> getUid() async {
-    return _auth.currentUser!.uid;
+  Future<String?> getUid() async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      return null;
+    }
+    return user.uid;
   }
 
 }
