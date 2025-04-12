@@ -6,6 +6,7 @@ import 'package:recipez/features/recipes/presentation/widgets/grid_view_recipes.
 import 'package:recipez/features/recipes/presentation/widgets/card_recipe.dart';
 import 'package:recipez/core/constants/app_color.dart';
 import 'package:recipez/core/presentation/widgets/title_page.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ListRecipe extends StatelessWidget {
   final String userId;
@@ -40,7 +41,7 @@ class ListRecipe extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 20),
-                  TitlePage(text: titlePage)
+                  TitlePage(text: titlePage),
                 ],
               ),
               Expanded(
@@ -52,48 +53,75 @@ class ListRecipe extends StatelessWidget {
                     } else if (snapshot.hasData) {
                       final recipes = snapshot.data;
                       if (recipes!.isEmpty) {
-                        return const Center(
-                          child: Text('No hay recetas disponibles'),
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                "assets/not-results.png",
+                                width: 150,
+                                height: 150,
+                                fit: BoxFit.contain,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                "No hay recetas disponibles",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColor.morado_3_53c,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                "¡Intenta con otros filtros!",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
                         );
                       }
 
-                      final recipeCards = recipes
-                          .map((recipe) => CardRecipe(
-                                recipe: Recipe(
-                                  id: recipe.id,
-                                  title: recipe.title,
-                                  description: '',
-                                  userId: userId,
-                                  userName: '',
-                                  userPhotoUrl: '',
-                                  imageUrl: recipe.photoURL,
-                                  preparationTime:
-                                      int.parse(recipe.estimatedTime),
-                                  portions: int.parse(recipe.personQuantity),
-                                  difficulty: 1,
-                                  steps: const [],
-                                  ingredients: const [],
-                                  likes: const [],
-                                  views: 0,
-                                  date: Timestamp.now(),
-                                  reports: const [],
+                      final recipeCards =
+                          recipes
+                              .map(
+                                (recipe) => CardRecipe(
+                                  recipe: Recipe(
+                                    id: recipe.id,
+                                    title: recipe.title,
+                                    description: '',
+                                    userId: userId,
+                                    userName: '',
+                                    userPhotoUrl: '',
+                                    imageUrl: recipe.photoURL,
+                                    preparationTime: int.parse(
+                                      recipe.estimatedTime,
+                                    ),
+                                    portions: int.parse(recipe.personQuantity),
+                                    difficulty: 1,
+                                    steps: const [],
+                                    ingredients: const [],
+                                    likes: const [],
+                                    views: 0,
+                                    date: Timestamp.now(),
+                                    reports: const [],
+                                  ),
                                 ),
-                              ))
-                          .toList();
+                              )
+                              .toList();
 
                       return ListView(
                         physics: const BouncingScrollPhysics(),
-                        children: [
-                          GridViewRecipes(cardsRecipes: recipeCards),
-                        ],
+                        children: [GridViewRecipes(cardsRecipes: recipeCards)],
                       );
                     }
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return const Center(child: CircularProgressIndicator());
                   },
                 ),
-              )
+              ),
             ],
           ),
         ),

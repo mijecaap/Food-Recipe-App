@@ -1,0 +1,2 @@
+D:/Proyectos Personales/Food-Recipe-App/android/app/.cxx/Debug/4d19245d/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/Proyectos Personales/Food-Recipe-App/android/app/.cxx/Debug/4d19245d/armeabi-v7a/CMakeFiles/rebuild_cache.dir

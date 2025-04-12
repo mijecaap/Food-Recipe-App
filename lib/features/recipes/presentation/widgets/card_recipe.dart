@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:recipez/features/recipes/domain/entities/recipe.dart';
 import 'package:recipez/features/recipes/presentation/bloc/recipe_bloc.dart';
@@ -19,18 +20,20 @@ class CardRecipe extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         final isAuthenticated = context.read<AuthBloc>().state is Authenticated;
-        final currentUserId = isAuthenticated
-            ? (context.read<AuthBloc>().state as Authenticated).user.uid
-            : '';
+        final currentUserId =
+            isAuthenticated
+                ? (context.read<AuthBloc>().state as Authenticated).user.uid
+                : '';
 
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => RecipeInformation(
-              recipe.id,
-              recipe.userId,
-              isAuthenticated && currentUserId == recipe.userId,
-            ),
+            builder:
+                (BuildContext context) => RecipeInformation(
+                  recipe.id,
+                  recipe.userId,
+                  isAuthenticated && currentUserId == recipe.userId,
+                ),
           ),
         );
       },
@@ -43,11 +46,31 @@ class CardRecipe extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    recipe.imageUrl,
+                  child: CachedNetworkImage(
+                    imageUrl: recipe.imageUrl,
                     width: double.infinity,
                     height: 130,
                     fit: BoxFit.cover,
+                    memCacheWidth: 400, // Limitar el tamaño en memoria
+                    memCacheHeight: 300,
+                    fadeInDuration: const Duration(milliseconds: 300),
+                    placeholderFadeInDuration: const Duration(
+                      milliseconds: 200,
+                    ),
+                    placeholder:
+                        (context, url) => Container(
+                          color: Colors.grey[300],
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                    errorWidget:
+                        (context, url, error) => Image.asset(
+                          'assets/no-image.png',
+                          width: double.infinity,
+                          height: 130,
+                          fit: BoxFit.cover,
+                        ),
                   ),
                 ),
                 Positioned(
@@ -60,8 +83,8 @@ class CardRecipe extends StatelessWidget {
                         return GestureDetector(
                           onTap: () {
                             context.read<RecipeBloc>().add(
-                                  LikeRecipeEvent(recipe.id, state.user.uid),
-                                );
+                              LikeRecipeEvent(recipe.id, state.user.uid),
+                            );
                           },
                           child: Container(
                             padding: const EdgeInsets.all(5),
@@ -96,18 +119,32 @@ class CardRecipe extends StatelessWidget {
             const SizedBox(height: 5),
             Row(
               children: [
-                CircleAvatar(
-                  radius: 10,
-                  backgroundImage: NetworkImage(recipe.userPhotoUrl),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: CachedNetworkImage(
+                    imageUrl: recipe.userPhotoUrl,
+                    width: 20,
+                    height: 20,
+                    fit: BoxFit.cover,
+                    placeholder:
+                        (context, url) => Container(
+                          color: Colors.grey[300],
+                          child: const Center(
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        ),
+                    errorWidget:
+                        (context, url, error) => Container(
+                          color: Colors.grey[300],
+                          child: const Icon(Icons.person, size: 14),
+                        ),
+                  ),
                 ),
                 const SizedBox(width: 5),
                 Expanded(
                   child: Text(
                     recipe.userName,
-                    style: GoogleFonts.roboto(
-                      fontSize: 12,
-                      color: Colors.grey,
-                    ),
+                    style: GoogleFonts.roboto(fontSize: 12, color: Colors.grey),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

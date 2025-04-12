@@ -17,10 +17,16 @@ import 'package:recipez/features/recipes/domain/usecases/create_recipe.dart';
 import 'package:recipez/features/recipes/domain/usecases/get_all_recipes.dart';
 import 'package:recipez/features/recipes/domain/usecases/get_recipe_by_id.dart';
 import 'package:recipez/features/recipes/presentation/bloc/recipe_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:recipez/core/services/cache_service.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  // Services
+  final prefs = await SharedPreferences.getInstance();
+  sl.registerLazySingleton(() => CacheService(prefs));
+
   // Features - Auth
   // Bloc
   sl.registerFactory(
@@ -38,9 +44,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SignOut(sl()));
 
   // Repository
-  sl.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(sl()),
-  );
+  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
 
   // Data sources
   sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -54,11 +58,7 @@ Future<void> init() async {
 
   // Features - Recipes
   // Bloc
-  sl.registerFactory(
-    () => RecipeBloc(
-      repository: sl(),
-    ),
-  );
+  sl.registerFactory(() => RecipeBloc(repository: sl(), cacheService: sl()));
 
   // Use cases
   sl.registerLazySingleton(() => GetAllRecipes(sl()));
@@ -66,15 +66,11 @@ Future<void> init() async {
   sl.registerLazySingleton(() => CreateRecipe(sl()));
 
   // Repository
-  sl.registerLazySingleton<RecipeRepository>(
-    () => RecipeRepositoryImpl(sl()),
-  );
+  sl.registerLazySingleton<RecipeRepository>(() => RecipeRepositoryImpl(sl()));
 
   // Data sources
   sl.registerLazySingleton<RecipeRemoteDataSource>(
-    () => RecipeRemoteDataSourceImpl(
-      firestore: sl(),
-    ),
+    () => RecipeRemoteDataSourceImpl(firestore: sl()),
   );
 
   // External

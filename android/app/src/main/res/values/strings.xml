@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">recipez</string>
     <string name="facebook_app_id">5738298396234807</string>
     <string name="fb_login_protocol_scheme">fb5738298396234807</string>
     <string name="facebook_client_token">20ae5ef44caea4f334f914547a3543a1</string>

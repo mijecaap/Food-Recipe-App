@@ -8,15 +8,18 @@ import 'package:recipez/features/recipes/presentation/bloc/recipe_bloc.dart';
 import 'package:recipez/features/recipes/presentation/bloc/recipe_event.dart';
 import 'package:recipez/features/recipes/presentation/bloc/recipe_state.dart';
 import 'package:recipez/core/constants/app_color.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 const List<Widget> textReport = <Widget>[
   Padding(
-      padding: EdgeInsets.only(left: 16, right: 16),
-      child: Text("Receta inapropiada")),
+    padding: EdgeInsets.only(left: 16, right: 16),
+    child: Text("Receta inapropiada"),
+  ),
   Padding(padding: EdgeInsets.only(left: 16, right: 16), child: Text("Spam")),
   Padding(
-      padding: EdgeInsets.only(left: 16, right: 16),
-      child: Text("Receta peligrosa"))
+    padding: EdgeInsets.only(left: 16, right: 16),
+    child: Text("Receta peligrosa"),
+  ),
 ];
 
 enum Menu { edit, report }
@@ -46,13 +49,13 @@ class _RecipeInformationState extends State<RecipeInformation> {
     return BlocConsumer<RecipeBloc, RecipeState>(
       listener: (context, state) {
         if (state is RecipeError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
         } else if (state is RecipeActionSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
           if (state.message.contains('eliminada')) {
             Navigator.pop(context);
           }
@@ -72,9 +75,21 @@ class _RecipeInformationState extends State<RecipeInformation> {
                   expandedHeight: 300,
                   pinned: true,
                   flexibleSpace: FlexibleSpaceBar(
-                    background: Image.network(
-                      recipe.imageUrl,
+                    background: CachedNetworkImage(
+                      imageUrl: recipe.imageUrl,
                       fit: BoxFit.cover,
+                      placeholder:
+                          (context, url) => Container(
+                            color: Colors.grey[300],
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                      errorWidget:
+                          (context, url, error) => Image.asset(
+                            'assets/no-image.png',
+                            fit: BoxFit.cover,
+                          ),
                     ),
                   ),
                   leading: IconButton(
@@ -89,58 +104,62 @@ class _RecipeInformationState extends State<RecipeInformation> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => RecipeForm(
-                                  userId: widget.userId,
-                                  id: recipe.id,
-                                  photoURL: recipe.imageUrl,
-                                  title: recipe.title,
-                                  description: recipe.description,
-                                  person: recipe.portions.toString(),
-                                  estimatedTime:
-                                      recipe.preparationTime.toString(),
-                                  ingredients: recipe.ingredients,
-                                  steps: recipe.steps,
-                                ),
+                                builder:
+                                    (context) => RecipeForm(
+                                      userId: widget.userId,
+                                      id: recipe.id,
+                                      photoURL: recipe.imageUrl,
+                                      title: recipe.title,
+                                      description: recipe.description,
+                                      person: recipe.portions.toString(),
+                                      estimatedTime:
+                                          recipe.preparationTime.toString(),
+                                      ingredients: recipe.ingredients,
+                                      steps: recipe.steps,
+                                    ),
                               ),
                             );
                           } else if (item == Menu.report) {
                             showDialog(
                               context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                title: const Text(
-                                    '¿Estás seguro de eliminar esta receta?'),
-                                content: const Text(
-                                    'Esta acción no se puede deshacer'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('Cancelar'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      context.read<RecipeBloc>().add(
+                              builder:
+                                  (BuildContext context) => AlertDialog(
+                                    title: const Text(
+                                      '¿Estás seguro de eliminar esta receta?',
+                                    ),
+                                    content: const Text(
+                                      'Esta acción no se puede deshacer',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('Cancelar'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          context.read<RecipeBloc>().add(
                                             DeleteRecipeEvent(recipe.id),
                                           );
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text('Eliminar'),
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Eliminar'),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
                             );
                           }
                         },
-                        itemBuilder: (BuildContext context) =>
-                            <PopupMenuEntry<Menu>>[
-                          const PopupMenuItem<Menu>(
-                            value: Menu.edit,
-                            child: Text('Editar'),
-                          ),
-                          const PopupMenuItem<Menu>(
-                            value: Menu.report,
-                            child: Text('Eliminar'),
-                          ),
-                        ],
+                        itemBuilder:
+                            (BuildContext context) => <PopupMenuEntry<Menu>>[
+                              const PopupMenuItem<Menu>(
+                                value: Menu.edit,
+                                child: Text('Editar'),
+                              ),
+                              const PopupMenuItem<Menu>(
+                                value: Menu.report,
+                                child: Text('Eliminar'),
+                              ),
+                            ],
                       )
                     else
                       IconButton(
@@ -149,8 +168,10 @@ class _RecipeInformationState extends State<RecipeInformation> {
                             context: context,
                             builder: (BuildContext context) {
                               return StatefulBuilder(
-                                builder: (BuildContext context,
-                                    StateSetter setState) {
+                                builder: (
+                                  BuildContext context,
+                                  StateSetter setState,
+                                ) {
                                   return Container(
                                     height: 300,
                                     color: Colors.white,
@@ -158,7 +179,9 @@ class _RecipeInformationState extends State<RecipeInformation> {
                                       children: [
                                         const Padding(
                                           padding: EdgeInsets.only(
-                                              top: 20, bottom: 20),
+                                            top: 20,
+                                            bottom: 20,
+                                          ),
                                           child: Text(
                                             'Reportar receta',
                                             style: TextStyle(
@@ -171,9 +194,11 @@ class _RecipeInformationState extends State<RecipeInformation> {
                                           direction: Axis.vertical,
                                           onPressed: (int index) {
                                             setState(() {
-                                              for (int i = 0;
-                                                  i < _selectReport.length;
-                                                  i++) {
+                                              for (
+                                                int i = 0;
+                                                i < _selectReport.length;
+                                                i++
+                                              ) {
                                                 _selectReport[i] = i == index;
                                               }
                                             });
@@ -197,19 +222,19 @@ class _RecipeInformationState extends State<RecipeInformation> {
                                             final authState =
                                                 context.read<AuthBloc>().state;
                                             if (authState is Authenticated) {
-                                              final reason = _selectReport[0]
-                                                  ? "Receta inapropiada"
-                                                  : _selectReport[1]
+                                              final reason =
+                                                  _selectReport[0]
+                                                      ? "Receta inapropiada"
+                                                      : _selectReport[1]
                                                       ? "Spam"
                                                       : "Receta peligrosa";
                                               context.read<RecipeBloc>().add(
-                                                    ReportRecipeEvent(
-                                                      recipeId: recipe.id,
-                                                      userId:
-                                                          authState.user.uid,
-                                                      reason: reason,
-                                                    ),
-                                                  );
+                                                ReportRecipeEvent(
+                                                  recipeId: recipe.id,
+                                                  userId: authState.user.uid,
+                                                  reason: reason,
+                                                ),
+                                              );
                                               Navigator.pop(context);
                                             }
                                           },
@@ -244,17 +269,51 @@ class _RecipeInformationState extends State<RecipeInformation> {
                           const SizedBox(height: 10),
                           Row(
                             children: [
-                              CircleAvatar(
-                                radius: 20,
-                                backgroundImage:
-                                    NetworkImage(recipe.userPhotoUrl),
+                              Hero(
+                                tag: 'user-${recipe.userId}',
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: CachedNetworkImage(
+                                    imageUrl: recipe.userPhotoUrl,
+                                    width: 40,
+                                    height: 40,
+                                    fit: BoxFit.cover,
+                                    placeholder:
+                                        (context, url) => Container(
+                                          color: Colors.grey[300],
+                                          child: const Center(
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                            ),
+                                          ),
+                                        ),
+                                    errorWidget:
+                                        (context, url, error) => Container(
+                                          color: Colors.grey[300],
+                                          child: const Icon(
+                                            Icons.person,
+                                            size: 24,
+                                          ),
+                                        ),
+                                  ),
+                                ),
                               ),
                               const SizedBox(width: 10),
-                              Text(
-                                recipe.userName,
-                                style: GoogleFonts.roboto(
-                                  fontSize: 16,
-                                  color: Colors.grey,
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      recipe.userName,
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    // Add other user details if needed
+                                  ],
                                 ),
                               ),
                             ],
@@ -291,8 +350,8 @@ class _RecipeInformationState extends State<RecipeInformation> {
                                     recipe.difficulty == 1
                                         ? 'Fácil'
                                         : recipe.difficulty == 2
-                                            ? 'Medio'
-                                            : 'Difícil',
+                                        ? 'Medio'
+                                        : 'Difícil',
                                     style: GoogleFonts.roboto(fontSize: 14),
                                   ),
                                 ],

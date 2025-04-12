@@ -10,7 +10,11 @@ abstract class RecipeRemoteDataSource {
   Stream<List<RecipeModel>> getRecipesByViews(String userId, bool limit);
   Stream<List<RecipeModel>> searchRecipes(String text, String userId);
   Future<List<RecipeModel>> searchRecipesByIngredient(
-      String name, int value, String dimension, String userId);
+    String name,
+    int value,
+    String dimension,
+    String userId,
+  );
   Future<RecipeModel?> getRecipeById(String id);
   Future<void> createRecipe(RecipeModel recipe);
   Future<void> updateRecipe(RecipeModel recipe);
@@ -23,19 +27,27 @@ abstract class RecipeRemoteDataSource {
 class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
   final FirebaseFirestore _firestore;
   static const String recipes = 'recipes';
+  final int _batchSize = 10; // Limitar el tamaño de los resultados
 
   RecipeRemoteDataSourceImpl({required FirebaseFirestore firestore})
-      : _firestore = firestore;
+    : _firestore = firestore;
 
   @override
   Stream<List<RecipeModel>> getAllRecipes(String userId) {
     return _firestore
         .collection(recipes)
         .where('userId', isNotEqualTo: userId)
+        .limit(_batchSize)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => RecipeModel.fromJson({...doc.data(), 'id': doc.id}))
-            .toList());
+        .map(
+          (snapshot) =>
+              snapshot.docs
+                  .map(
+                    (doc) =>
+                        RecipeModel.fromJson({...doc.data(), 'id': doc.id}),
+                  )
+                  .toList(),
+        );
   }
 
   @override
@@ -44,9 +56,15 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
         .collection(recipes)
         .where(FieldPath.documentId, whereIn: favorites)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => RecipeModel.fromJson({...doc.data(), 'id': doc.id}))
-            .toList());
+        .map(
+          (snapshot) =>
+              snapshot.docs
+                  .map(
+                    (doc) =>
+                        RecipeModel.fromJson({...doc.data(), 'id': doc.id}),
+                  )
+                  .toList(),
+        );
   }
 
   @override
@@ -55,9 +73,15 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
         .collection(recipes)
         .where(FieldPath.documentId, whereIn: myRecipes)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => RecipeModel.fromJson({...doc.data(), 'id': doc.id}))
-            .toList());
+        .map(
+          (snapshot) =>
+              snapshot.docs
+                  .map(
+                    (doc) =>
+                        RecipeModel.fromJson({...doc.data(), 'id': doc.id}),
+                  )
+                  .toList(),
+        );
   }
 
   @override
@@ -69,9 +93,12 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
 
     if (limit) query = query.limit(10);
 
-    return query.snapshots().map((snapshot) => snapshot.docs
-        .map((doc) => RecipeModel.fromJson({...doc.data(), 'id': doc.id}))
-        .toList());
+    return query.snapshots().map(
+      (snapshot) =>
+          snapshot.docs
+              .map((doc) => RecipeModel.fromJson({...doc.data(), 'id': doc.id}))
+              .toList(),
+    );
   }
 
   @override
@@ -83,9 +110,12 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
 
     if (limit) query = query.limit(10);
 
-    return query.snapshots().map((snapshot) => snapshot.docs
-        .map((doc) => RecipeModel.fromJson({...doc.data(), 'id': doc.id}))
-        .toList());
+    return query.snapshots().map(
+      (snapshot) =>
+          snapshot.docs
+              .map((doc) => RecipeModel.fromJson({...doc.data(), 'id': doc.id}))
+              .toList(),
+    );
   }
 
   @override
@@ -97,9 +127,12 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
 
     if (limit) query = query.limit(10);
 
-    return query.snapshots().map((snapshot) => snapshot.docs
-        .map((doc) => RecipeModel.fromJson({...doc.data(), 'id': doc.id}))
-        .toList());
+    return query.snapshots().map(
+      (snapshot) =>
+          snapshot.docs
+              .map((doc) => RecipeModel.fromJson({...doc.data(), 'id': doc.id}))
+              .toList(),
+    );
   }
 
   @override
@@ -110,9 +143,15 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
         .where('title', isGreaterThanOrEqualTo: text)
         .where('title', isLessThan: '${text}z')
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => RecipeModel.fromJson({...doc.data(), 'id': doc.id}))
-            .toList());
+        .map(
+          (snapshot) =>
+              snapshot.docs
+                  .map(
+                    (doc) =>
+                        RecipeModel.fromJson({...doc.data(), 'id': doc.id}),
+                  )
+                  .toList(),
+        );
   }
 
   @override
@@ -122,17 +161,22 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
     String dimension,
     String userId,
   ) async {
-    final snapshot = await _firestore
-        .collection(recipes)
-        .where('userId', isNotEqualTo: userId)
-        .get();
+    final snapshot =
+        await _firestore
+            .collection(recipes)
+            .where('userId', isNotEqualTo: userId)
+            .get();
 
     return snapshot.docs
         .map((doc) => RecipeModel.fromJson({...doc.data(), 'id': doc.id}))
-        .where((recipe) => recipe.ingredients.any((ingredient) =>
-            ingredient['name'] == name &&
-            ingredient['value'] == value &&
-            ingredient['dimension'] == dimension))
+        .where(
+          (recipe) => recipe.ingredients.any(
+            (ingredient) =>
+                ingredient['name'] == name &&
+                ingredient['value'] == value &&
+                ingredient['dimension'] == dimension,
+          ),
+        )
         .toList();
   }
 
@@ -145,12 +189,18 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
 
   @override
   Future<void> createRecipe(RecipeModel recipe) async {
-    await _firestore.collection(recipes).add(recipe.toJson());
+    final batch = _firestore.batch();
+    final recipeRef = _firestore.collection(recipes).doc();
+    batch.set(recipeRef, recipe.toJson());
+    await batch.commit();
   }
 
   @override
   Future<void> updateRecipe(RecipeModel recipe) async {
-    await _firestore.collection(recipes).doc(recipe.id).update(recipe.toJson());
+    final batch = _firestore.batch();
+    final recipeRef = _firestore.collection(recipes).doc(recipe.id);
+    batch.update(recipeRef, recipe.toJson());
+    await batch.commit();
   }
 
   @override
@@ -175,21 +225,19 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
 
   @override
   Future<void> reportRecipe(
-      String recipeId, String userId, String reason) async {
+    String recipeId,
+    String userId,
+    String reason,
+  ) async {
     final doc = await _firestore.collection(recipes).doc(recipeId).get();
     final recipe = RecipeModel.fromJson({...doc.data()!, 'id': doc.id});
 
     List<Map<String, dynamic>> reports = List.from(recipe.reports);
-    reports.add({
-      'userId': userId,
-      'reason': reason,
-      'date': Timestamp.now(),
-    });
+    reports.add({'userId': userId, 'reason': reason, 'date': Timestamp.now()});
 
-    await _firestore
-        .collection(recipes)
-        .doc(recipeId)
-        .update({'reports': reports});
+    await _firestore.collection(recipes).doc(recipeId).update({
+      'reports': reports,
+    });
   }
 
   @override

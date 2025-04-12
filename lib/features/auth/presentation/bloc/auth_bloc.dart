@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
+import 'package:rxdart/rxdart.dart';
 import 'package:recipez/core/usecases/usecase.dart';
 import 'package:recipez/features/auth/domain/usecases/sign_in_with_google.dart';
 import 'package:recipez/features/auth/domain/usecases/sign_in_with_facebook.dart';
@@ -28,11 +29,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<GetCurrentUser>(_onGetCurrentUser);
     on<UpdateUserSubscription>(_onUpdateUserSubscription);
 
-    _authStateSubscription = repository.authStateChanges.listen((user) {
-      if (user == null) {
-        add(SignOutPressed());
-      }
-    });
+    // Optimizar manejo del estado de autenticación
+    _authStateSubscription = repository.authStateChanges
+        .throttle((_) => Stream.value(const Duration(milliseconds: 500)))
+        .listen((user) {
+          if (user == null &&
+              state is! AuthInitial &&
+              state is! Unauthenticated) {
+            add(SignOutPressed());
+          }
+        });
   }
 
   Future<void> _onSignInWithGooglePressed(
@@ -95,16 +101,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         event.subscription,
         event.paymentId,
       );
-      result.fold(
-        (failure) => emit(AuthError(failure.toString())),
-        (_) async {
-          final userResult = await repository.getUser(event.uid);
-          userResult.fold(
-            (failure) => emit(AuthError(failure.toString())),
-            (user) => emit(Authenticated(user)),
-          );
-        },
-      );
+      result.fold((failure) => emit(AuthError(failure.toString())), (_) async {
+        final userResult = await repository.getUser(event.uid);
+        userResult.fold(
+          (failure) => emit(AuthError(failure.toString())),
+          (user) => emit(Authenticated(user)),
+        );
+      });
     }
   }
 
