@@ -4,10 +4,15 @@ import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:recipez/User/bloc/bloc_user.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:recipez/User/ui/screens/sign_in.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Cargar variables de entorno
+  await dotenv.load(fileName: ".env");
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

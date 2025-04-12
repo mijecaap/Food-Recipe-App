@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -49,21 +50,20 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCVtuoJkKd30ejIUwUrvLTaKD84O6NMzo8',
-    appId: '1:457111173033:android:c1411d072a8d1a130eb6b8',
-    messagingSenderId: '457111173033',
-    projectId: 'recipez-d861e',
-    storageBucket: 'recipez-d861e.appspot.com',
-  );
+  static FirebaseOptions get android => FirebaseOptions(
+        apiKey: dotenv.env['ANDROID_API_KEY'] ?? '',
+        appId: dotenv.env['ANDROID_APP_ID'] ?? '',
+        messagingSenderId: dotenv.env['ANDROID_MESSAGING_SENDER_ID'] ?? '',
+        projectId: dotenv.env['ANDROID_PROJECT_ID'] ?? '',
+        storageBucket: dotenv.env['ANDROID_STORAGE_BUCKET'] ?? '',
+      );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAPCInBqZMQqQVveIm5QuwnHQ-wTyY0JAY',
-    appId: '1:457111173033:ios:1d0b4a26069652cb0eb6b8',
-    messagingSenderId: '457111173033',
-    projectId: 'recipez-d861e',
-    storageBucket: 'recipez-d861e.appspot.com',
-    iosClientId: '457111173033-6bmto0imppltt8e8f6qti5qkeuqjs36q.apps.googleusercontent.com',
-    iosBundleId: 'com.example.recipez',
-  );
+  static FirebaseOptions get ios => FirebaseOptions(
+        apiKey: dotenv.env['IOS_API_KEY'] ?? '',
+        appId: dotenv.env['IOS_APP_ID'] ?? '',
+        messagingSenderId: dotenv.env['IOS_MESSAGING_SENDER_ID'] ?? '',
+        projectId: dotenv.env['IOS_PROJECT_ID'] ?? '',
+        storageBucket: dotenv.env['IOS_STORAGE_BUCKET'] ?? '',
+        iosClientId: dotenv.env['IOS_CLIENT_ID'] ?? '',
+      );
 }

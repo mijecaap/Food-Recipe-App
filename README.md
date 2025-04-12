@@ -1,16 +1,84 @@
-# recipez
+# Food Recipe App
 
-A new Flutter project for the university.
+Una aplicación móvil para gestionar y compartir recetas de comida, desarrollada con Flutter y Firebase.
 
-## Getting Started
+## Características
 
-This project is a starting point for a Flutter application.
+- Autenticación de usuarios mediante:
+  - Google Sign In
+  - Facebook Login
+  - Firebase Authentication
 
-A few resources to get you started if this is your first Flutter project:
+- Gestión de recetas:
+  - Crear nuevas recetas
+  - Subir fotos de los platos
+  - Guardar recetas favoritas
+  - Ver mis recetas
+  
+- Almacenamiento de datos:
+  - Firebase Cloud Firestore para la base de datos
+  - Firebase Storage para las imágenes
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Tecnologías Utilizadas
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Flutter
+- Firebase
+  - Authentication
+  - Cloud Firestore
+  - Storage
+- Google Sign In
+- Facebook Authentication
+- Image Picker
+- File Picker
+
+## Requisitos Previos
+
+- Flutter SDK
+- Android Studio / VS Code
+- Firebase CLI
+- Una cuenta de Firebase
+- Configuración de proyecto en Facebook Developers para el login con Facebook
+
+## Instalación
+
+1. Clonar el repositorio
+```bash
+git clone https://github.com/tu-usuario/Food-Recipe-App.git
+```
+
+2. Instalar dependencias
+```bash
+flutter pub get
+```
+
+3. Configurar Firebase:
+   - Agregar el archivo google-services.json en android/app/
+   - Configurar firebase_options.dart con tus credenciales
+
+4. Ejecutar la aplicación
+```bash
+flutter run
+```
+
+## Estructura del Proyecto
+
+- `lib/`
+  - `core/` - Funcionalidades principales
+  - `features/` - Características de la aplicación
+  - `Recipe/` - Lógica relacionada con recetas
+  - `Shared/` - Componentes compartidos
+  - `User/` - Gestión de usuarios
+
+## Contribución
+
+Las contribuciones son bienvenidas. Para cambios importantes:
+
+1. Fork el proyecto
+2. Crea una rama para tu característica
+3. Commit tus cambios
+4. Push a la rama
+5. Abre un Pull Request
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
