@@ -63,8 +63,6 @@ flutter run
 ## Estructura del Proyecto
 
 - `lib/`
-  - `core/` - Funcionalidades principales
-  - `features/` - Características de la aplicación
   - `Recipe/` - Lógica relacionada con recetas
   - `Shared/` - Componentes compartidos
   - `User/` - Gestión de usuarios
