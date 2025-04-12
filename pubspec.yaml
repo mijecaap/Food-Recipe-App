@@ -49,6 +49,12 @@ dependencies:
   path: ^1.8.1
   file_picker: ^5.0.1
   purchases_flutter: ^4.2.0
+  flutter_facebook_auth: ^3.5.0
+  animated_text_kit: ^4.2.2
+  http_auth: ^1.0.1
+  webview_flutter: ^3.0.4
+  art_sweetalert: ^0.0.5
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +91,7 @@ flutter:
     - assets/not-results.png
     - assets/open-camera.png
     - assets/no-image.png
+    - assets/Logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

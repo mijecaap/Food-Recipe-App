@@ -5,7 +5,7 @@ import 'package:recipez/Recipe/bloc/bloc_recipe.dart';
 import 'package:recipez/Recipe/ui/screens/add_recipe_screen.dart';
 import 'package:recipez/Recipe/ui/screens/recipe_form.dart';
 import 'package:recipez/Shared/model/app_color.dart';
-import 'package:recipez/Shared/ui/widgets/fitted_text.dart';
+import 'package:recipez/Shared/ui/widgets/tittle_page.dart';
 import 'package:recipez/User/bloc/bloc_user.dart';
 
 class AddRecipe extends StatelessWidget {
@@ -15,67 +15,47 @@ class AddRecipe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    var statusHeight = MediaQuery.of(context).viewPadding.top;
-    var size = MediaQuery.of(context).size;
-    var screenHeight = size.height - (statusHeight);
-    var screenWidth = size.width;
 
     userBloc = BlocProvider.of(context);
 
     return SafeArea(
         child: Container(
-          padding: EdgeInsets.only(
-            top: screenHeight / 48,
-            right: screenHeight / 48,
-            bottom: screenHeight / 48,
-            left: screenHeight / 48
+          padding: const EdgeInsets.only(
+            top: 40,
+            bottom: 40,
+            right: 20,
+            left: 20
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              FittedText(
-                heightBox: screenHeight / 16,
-                firstText: "Create ",
-                boldText: "Recipes",
-              ),
+              const TittlePage(text: "Create Recipes"),
               Expanded(
                 child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.only(
-                    left: screenHeight / 24,
-                    right: screenHeight / 24,
-                    bottom: screenHeight / 8
-                  ),
+                  alignment: Alignment.center,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        height: screenWidth / 1.5,
-                        child: ColorFiltered(
-                          colorFilter: ColorFilter.mode(AppColor.filterColor, BlendMode.modulate),
-                          child: const Image(
-                            image: AssetImage("assets/create-recipe.png"),
-                          ),
-                        )
+                      ColorFiltered(
+                        colorFilter: ColorFilter.mode(AppColor.lila_1_8ff, BlendMode.modulate),
+                        child: const Image(
+                          image: AssetImage("assets/create-recipe.png"),
+                          height: 250,
+                        ),
                       ),
-                      SizedBox(height: screenHeight / 48),
-                      Material(
-                        elevation: 10,
-                        borderRadius: BorderRadius.all(Radius.circular(screenHeight / 48)),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(screenHeight / 48),
-                              color: AppColor.secondaryColor
-                          ),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
+                      const SizedBox(height: 30),
+                      Container(
+                        height: 54,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          color: AppColor.morado_3_53c,
+                          borderRadius: const BorderRadius.all(Radius.circular(15))
+                        ),
+                        child: Material(
+                          borderRadius: const BorderRadius.all(Radius.circular(15)),
+                          color: Colors.transparent,
+                          child: InkWell(
                               onTap: () {
-                                /*Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) {
-                                    return RecipeForm();
-                                  })
-                                );*/
                                 userBloc.getUserId().then((value) {
                                   Navigator.push(context, MaterialPageRoute(
                                       builder: (context) {
@@ -87,32 +67,33 @@ class AddRecipe extends StatelessWidget {
                                   );
                                 });
                               },
-                              borderRadius: BorderRadius.circular(screenHeight / 48),
+                              borderRadius: const BorderRadius.all(Radius.circular(15)),
                               child: Container(
-                                width: screenWidth / 1.5,
-                                height: screenHeight / 12,
-                                padding: EdgeInsets.all(screenHeight / 96),
-                                child: FittedBox(
-                                  child: Text(
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.only(
+                                    left: 20,
+                                    right: 20
+                                ),
+                                child: Text(
                                     "Start create",
-                                    style: GoogleFonts.openSans(
-                                        color: Colors.white
+                                    style: GoogleFonts.roboto(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500
                                     )
-                                  ),
-                                )
-                              ),
-                            ),
+                                ),
+                              )
                           ),
                         ),
                       ),
-                      SizedBox(height: screenHeight / 48),
+                      const SizedBox(height: 10),
                       SizedBox(
-                        width: screenWidth / 1.5,
+                        width: 200,
                         child: Text(
                           "Create new recipes and share them with others",
-                          style: GoogleFonts.openSans(
-                            color: AppColor.thirdyColor,
-                            fontSize: screenHeight / 48
+                          style: GoogleFonts.roboto(
+                            color: AppColor.morado_1_57a,
+                            fontSize: 16
                           ),
                           textAlign: TextAlign.center,
                         ),

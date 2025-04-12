@@ -6,7 +6,7 @@ import 'package:recipez/Recipe/model/recipe_card.dart';
 import 'package:recipez/Recipe/ui/widgets/card_recipe.dart';
 import 'package:recipez/Recipe/ui/widgets/grid_view_recipes.dart';
 import 'package:recipez/Shared/model/app_color.dart';
-import 'package:recipez/Shared/ui/widgets/fitted_text.dart';
+import 'package:recipez/Shared/ui/widgets/tittle_page.dart';
 import 'package:recipez/Shared/ui/widgets/title_header.dart';
 import 'package:recipez/User/bloc/bloc_user.dart';
 import 'package:recipez/User/ui/widgets/profile_container.dart';
@@ -23,39 +23,30 @@ class ProfileRecipe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    var statusHeight = MediaQuery.of(context).viewPadding.top;
-    var size = MediaQuery.of(context).size;
-    var screenHeight = size.height - (statusHeight);
 
     userBloc = BlocProvider.of(context);
 
-    List<CardRecipe> cards = [];
-
     return SafeArea(
         child: Container(
-          padding: EdgeInsets.only(
-            top: screenHeight / 48,
-            right: screenHeight / 48,
-            left: screenHeight / 48
+          padding: const EdgeInsets.only(
+            top: 40,
+            right: 20,
+            left: 20
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              FittedText(
-                heightBox: screenHeight / 16,
-                firstText: "My ",
-                boldText: "Recipes",
-              ),
-              SizedBox(height: screenHeight / 48),
-              ProfileContainer(heightBox: screenHeight / 12),
-              SizedBox(height: screenHeight / 48),
+              const TittlePage(text: "My Recipe"),
+              const SizedBox(height: 30),
+              ProfileContainer(),
+              const SizedBox(height: 30),
               BlocProvider(
                 bloc: RecipeBloc(),
                 child: FutureBuilder(
                   future: userBloc.getUserId(),
                   builder: (_, snapshot) {
                     if(snapshot.hasError){
-                      return Text("No se encontró su id");
+                      return const Text("No se encontró su id");
                     } else if (snapshot.hasData) {
                       final userId = snapshot.data.toString();
                       return FutureBuilder<UserModel>(
@@ -95,9 +86,6 @@ class ListUserRecipes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var statusHeight = MediaQuery.of(context).viewPadding.top;
-    var size = MediaQuery.of(context).size;
-    var screenHeight = size.height - (statusHeight);
 
     recipeBloc = BlocProvider.of(context);
 
@@ -107,23 +95,24 @@ class ListUserRecipes extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Container(
-              height: screenHeight / 16,
+              height: 54,
               child: TabBar(
-                  indicatorColor: AppColor.secondaryColor,
-                  labelColor: AppColor.thirdyColor,
-                  labelStyle: GoogleFonts.openSans(
-                    fontWeight: FontWeight.w500,
-                    fontSize: (screenHeight / 16) / 3,
-                  ),
+                  indicatorColor: AppColor.lila_1_8ff,
                   tabs: [
                     Tab(
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.favorite, size: (screenHeight / 16) / 3),
-                            SizedBox(width: screenHeight / 96),
-                            Text("Favorites")
+                            Icon(Icons.favorite, size: 24, color: AppColor.morado_1_57a),
+                            SizedBox(width: 10),
+                            Text(
+                                "Favorites",
+                              style: GoogleFonts.roboto(
+                                fontSize: 16,
+                                color: AppColor.morado_1_57a
+                              ),
+                            )
                           ],
                         )
                     ),
@@ -132,9 +121,15 @@ class ListUserRecipes extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.restaurant_menu, size: (screenHeight / 16) / 3),
-                            SizedBox(width: screenHeight / 96),
-                            Text("My recipes")
+                            Icon(Icons.restaurant_menu, size: 24, color: AppColor.morado_1_57a),
+                            SizedBox(width: 10),
+                            Text(
+                              "My Recipes",
+                              style: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                  color: AppColor.morado_1_57a
+                              ),
+                            )
                           ],
                         )
                     ),
@@ -154,8 +149,7 @@ class ListUserRecipes extends StatelessWidget {
                         } else if (snapshot.hasData) {
                           final recipe = snapshot.data;
                           var wdgt = recipe!.map((e) {
-                            final isLiked = e.likesUserId.contains(user.uid);
-                            return CardRecipe(e.id, e.photoURL, e.title, e.likes, isLiked, user.uid, false, recipeBloc);
+                            return CardRecipe(e.id, e.photoURL, e.title, false, user.uid, false, recipeBloc);
                           }).toList();
                           return ListRecipes(cardsRecipes: wdgt, type: 1);
                         } else {
@@ -171,8 +165,7 @@ class ListUserRecipes extends StatelessWidget {
                         } else if (snapshot.hasData) {
                           final recipe = snapshot.data;
                           var wdgt = recipe!.map((e) {
-                            final isLiked = e.likesUserId.contains(user.uid);
-                            return CardRecipe(e.id, e.photoURL, e.title, e.likes, isLiked, user.uid, false, recipeBloc);
+                            return CardRecipe(e.id, e.photoURL, e.title, false, user.uid, true, recipeBloc);
                           }).toList();
                           return ListRecipes(cardsRecipes: wdgt, type: 2);
                         } else {

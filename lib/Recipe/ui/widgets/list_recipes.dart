@@ -17,10 +17,6 @@ class ListRecipes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    var statusHeight = MediaQuery.of(context).viewPadding.top;
-    var size = MediaQuery.of(context).size;
-    var screenHeight = size.height - (statusHeight);
-    var screenWidth = size.width;
 
     List<EmptyPage> listEmptyPage = <EmptyPage>[
       EmptyPage(
@@ -42,40 +38,38 @@ class ListRecipes extends StatelessWidget {
 
     return cardsRecipes.isEmpty
         ? (Container(
-            padding: EdgeInsets.only(bottom: screenHeight / 9),
+            padding: EdgeInsets.only(bottom: 100),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  width: screenWidth / 2,
-                  child: ColorFiltered(
-                    colorFilter: ColorFilter.mode(AppColor.filterColor, BlendMode.modulate),
-                    child: Image(
-                      image: AssetImage(listEmptyPage[type].imageURL),
-                    ),
-                  )
+                ColorFiltered(
+                  colorFilter: ColorFilter.mode(AppColor.lila_1_8ff, BlendMode.modulate),
+                  child: Image(
+                    image: AssetImage(listEmptyPage[type].imageURL),
+                    height: 200,
+                  ),
                 ),
-                SizedBox(height: screenHeight / 48),
+                SizedBox(height: 20),
                 Container(
-                  width: screenWidth / 2,
+                  width: 200,
                   child: Text(
                     listEmptyPage[type].title,
-                    style: GoogleFonts.openSans(
-                      color: AppColor.thirdyColor,
-                      fontSize: screenHeight / 32,
+                    style: GoogleFonts.roboto(
+                      color: AppColor.negro,
+                      fontSize: 16,
                       fontWeight: FontWeight.w700
                     ),
                     textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(height: screenHeight / 96),
+                SizedBox(height: 10),
                 Container(
-                  width: screenWidth / 2,
+                  width: 200,
                   child: Text(
                     listEmptyPage[type].subtitle,
-                    style: GoogleFonts.openSans(
-                        color: AppColor.thirdyColor,
-                        fontSize: screenHeight / 48
+                    style: GoogleFonts.roboto(
+                        color: AppColor.gris_5_d79,
+                        fontSize: 14
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -87,7 +81,6 @@ class ListRecipes extends StatelessWidget {
             physics: BouncingScrollPhysics(),
             children: [
               GridViewRecipes(cardsRecipes: cardsRecipes),
-              SizedBox(height: screenHeight / 12)
             ],
           ));
   }

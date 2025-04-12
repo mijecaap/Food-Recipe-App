@@ -4,42 +4,30 @@ import 'package:recipez/Shared/model/app_color.dart';
 
 class SubtitleButton extends StatelessWidget {
 
-  final String colorText;
-  final String secondText;
+  final String text;
 
-  const SubtitleButton({required this.colorText, required this.secondText, Key? key}) : super(key: key);
+  const SubtitleButton({required this.text, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    var statusHeight = MediaQuery.of(context).viewPadding.top;
-    var size = MediaQuery.of(context).size;
-    var screenHeight = size.height - (statusHeight);
 
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          colorText,
+          text,
           style: GoogleFonts.openSans(
-            fontSize: screenHeight / 24,
-            fontWeight: FontWeight.bold,
-            color: AppColor.secondaryColor
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: AppColor.morado_2_347
           ),
         ),
-        Text(
-          secondText,
-          style: GoogleFonts.openSans(
-            fontSize: screenHeight / 24,
-            fontWeight: FontWeight.bold,
-            color: AppColor.thirdyColor
-          ),
-        ),
-        const Spacer(),
-        Icon(
+        /*Icon(
           Icons.arrow_forward,
-          size: screenHeight / 24,
-          color: AppColor.thirdyColor,
-        )
+          size: 20,
+          color: AppColor.morado_2_347,
+        )*/
       ],
     );
 

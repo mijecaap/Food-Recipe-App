@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 class IngredientModel {
-  final String id;
-  final String name;
+  late String name;
+  late String valueText;
+  late double value;
+  late String dimension;
+  late String idRecipe;
 
-  IngredientModel(this.id, this.name);
+  IngredientModel(this.name, this.valueText, this.value, this.dimension);
+  
 }

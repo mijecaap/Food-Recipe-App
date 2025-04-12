@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ButtonGreen extends StatefulWidget {
+class ButtonBlue extends StatefulWidget {
 
   String text;
   double width;
   double height;
   VoidCallback onPressed;
 
-  ButtonGreen({Key? key, required this.text, required this.onPressed, this.width = 0.0, this.height = 0.0}) : super(key: key);
+  ButtonBlue({Key? key, required this.text, required this.onPressed, this.width = 0.0, this.height = 0.0}) : super(key: key);
 
   @override
-  State<ButtonGreen> createState() => _ButtonGreenState();
+  State<ButtonBlue> createState() => _ButtonBlueState();
 }
 
-class _ButtonGreenState extends State<ButtonGreen> {
+class _ButtonBlueState extends State<ButtonBlue> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,8 +25,8 @@ class _ButtonGreenState extends State<ButtonGreen> {
           borderRadius: BorderRadius.circular(15.0),
           gradient: LinearGradient(
               colors: [
-                Color(0xFFEA4335),
-                Color(0xFFC5221F)
+                Color(0xFF2596BE),
+                Color(0xFF325EA8)
               ],
               begin: FractionalOffset(0.2, 0.0),
               end: FractionalOffset(1.0, 0.6),
@@ -47,7 +47,7 @@ class _ButtonGreenState extends State<ButtonGreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ImageIcon(
-                      NetworkImage("https://cdn-icons-png.flaticon.com/512/2875/2875331.png"),
+                      NetworkImage("https://cdn-icons-png.flaticon.com/512/59/59439.png"),
                       size: 18.0,
                       color: Colors.white,
                     ),

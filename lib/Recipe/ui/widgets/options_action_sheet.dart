@@ -6,9 +6,8 @@ import 'package:recipez/Shared/model/app_color.dart';
 class OptionsActionSheet extends StatefulWidget {
   VoidCallback onPressed;
   VoidCallback onPressed2;
-  final double heightIcon;
 
-  OptionsActionSheet({required this.onPressed, required this.onPressed2, required this.heightIcon, Key? key}) : super(key: key);
+  OptionsActionSheet({required this.onPressed, required this.onPressed2, Key? key}) : super(key: key);
 
   @override
   State<OptionsActionSheet> createState() => _OptionsActionSheetState();
@@ -27,25 +26,27 @@ class _OptionsActionSheetState extends State<OptionsActionSheet> {
         actions: [
           CupertinoActionSheetAction(
             onPressed: () {
-              widget.onPressed2();
               Navigator.pop(context);
+              widget.onPressed2();
             },
             child: Text(
               "Subscribe",
               style: GoogleFonts.openSans(
-                color: AppColor.secondaryColor.withBlue(30)
+                color: AppColor.morado_3_53c
               ),
             ),
           ),
           CupertinoActionSheetAction(
             isDestructiveAction: true,
             onPressed: () {
-              widget.onPressed();
               Navigator.pop(context);
+              widget.onPressed();
             },
             child: Text(
               "Sign Out",
-              style: GoogleFonts.openSans(),
+              style: GoogleFonts.openSans(
+                color: AppColor.rojo_f59
+              ),
             ),
           )
         ],
@@ -56,25 +57,12 @@ class _OptionsActionSheetState extends State<OptionsActionSheet> {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(widget.heightIcon / 2),
+    return GestureDetector(
+      onTap: () => _showActionsSheet(context),
+      child: const Icon(
+        Icons.more_horiz,
+        size: 24,
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () => _showActionsSheet(context),
-          borderRadius: BorderRadius.circular(widget.heightIcon / 2),
-          child: Container(
-            height: widget.heightIcon,
-            width: widget.heightIcon,
-            child: Icon(
-              Icons.more_vert,
-              size: widget.heightIcon / 1.5,
-            )
-          ),
-        ),
-      )
     );
   }
 }
